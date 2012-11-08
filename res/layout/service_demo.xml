@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+  xmlns:android="http://schemas.android.com/apk/res/android"
+  android:layout_width="match_parent"
+  android:layout_height="match_parent"
+  android:orientation="vertical">
+  <Button 
+	android:id="@+id/startService"
+    android:layout_width="match_parent" 
+    android:layout_height="wrap_content"
+    android:text="启动普通服务" />
+  <Button 
+	android:id="@+id/stopService"
+    android:layout_width="match_parent" 
+    android:layout_height="wrap_content"
+    android:text="停止普通服务" />
+  <Button 
+	android:id="@+id/startIntentService"
+    android:layout_width="match_parent" 
+    android:layout_height="wrap_content"
+    android:text="启动Intent Service" />
+  <Button 
+	android:id="@+id/boundService"
+    android:layout_width="match_parent" 
+    android:layout_height="wrap_content"
+    android:text="绑定服务" />
+  <Button 
+	android:id="@+id/operateBoundService"
+    android:layout_width="match_parent" 
+    android:layout_height="wrap_content"
+    android:text="增加绑定服务的count属性" />
+  <Button 
+	android:id="@+id/getBoundServicePro"
+    android:layout_width="match_parent" 
+    android:layout_height="wrap_content"
+    android:text="获取绑定服务的count属性" />
+  <Button 
+	android:id="@+id/unboundService"
+    android:layout_width="match_parent" 
+    android:layout_height="wrap_content"
+    android:text="解除绑定服务" />
+  <Button 
+	android:id="@+id/startAIDLService"
+    android:layout_width="match_parent" 
+    android:layout_height="wrap_content"
+    android:text="启动AIDL服务" />
+  <Button 
+	android:id="@+id/stopAIDLService"
+    android:layout_width="match_parent" 
+    android:layout_height="wrap_content"
+    android:text="停止AIDL服务" />
+</LinearLayout>

@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+      package="com.trinea.android.demo"
+      android:versionCode="1"
+      android:versionName="1.0"
+      android:installLocation="preferExternal">
+	<supports-screens
+		android:largeScreens="true"
+    	android:normalScreens="true" 
+    	android:smallScreens="true"
+    	android:resizeable="true" 
+    	android:anyDensity="true" />
+    
+    <application android:icon="@drawable/icon" android:label="@string/app_name">
+    
+     	<service android:name=".MyService"/>
+     	<service android:name=".MyIntentService"/>
+     	<service android:name=".MyIntentService2"/>
+     	<service android:name=".MyAIDLService">
+     		<intent-filter>
+		    	<action android:name="com.trinea.android.demo.remote.MyAIDLServiceAction" />
+		    </intent-filter>
+     	</service>
+     	
+	    <receiver android:name="MyBroadcastReceiver">
+		    <intent-filter>
+		    	<action android:name="android.provider.Telephony.SMS_RECEIVED" />
+		    </intent-filter>
+	    </receiver>
+	    
+        <activity android:name="DemoList"
+                  android:label="@string/app_name">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        
+        <activity android:name=".GoogleMapDemo"
+                  android:label="@string/google_map_activity_title">
+        </activity>
+        
+        <activity android:name=".BaiduMapDemo"
+                  android:label="@string/baidu_map_activity_title">
+        </activity>
+        
+        <activity android:name=".IntentDemo"
+                  android:label="@string/intent_demo_activity_title">
+        </activity>
+        
+        <activity android:name=".SmsManagerDemo"
+                  android:label="@string/sms_demo_activity_title">
+        </activity>
+        
+        <activity android:name=".NotificationDemo"
+                  android:label="@string/notification_demo_activity_title">
+        </activity>
+        
+        <activity android:name=".BroadcastReceiverDemo"
+                  android:label="@string/broadcastreceiver_demo_activity_title">
+        </activity>
+        
+        <activity android:name=".ServiceDemo"
+                  android:label="@string/service_demo_activity_title">
+        </activity>
+
+    	<uses-library android:name="com.google.android.maps" />
+    </application>
+    
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+	<uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+	<uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />  
+	<uses-permission android:name="android.permission.CHANGE_WIFI_STATE" /> 
+	<uses-permission android:name="android.permission.READ_PHONE_STATE" />
+	<uses-permission android:name="android.permission.CALL_PHONE" />
+	<uses-permission android:name="android.permission.RECEIVE_SMS" />
+	<uses-permission android:name="android.permission.SEND_SMS" />
+	<uses-permission android:name="android.permission.BROADCAST_STICKY"/>
+</manifest>

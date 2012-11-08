@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Android Demo</string>
+    <string name="google_map_activity_title">Google Map Demo</string>
+    <string name="baidu_map_activity_title">Baidu Map Demo</string>
+    <string name="intent_demo_activity_title">Intent Demo</string>
+    <string name="service_demo_activity_title">Service Demo</string>
+    <string name="broadcastreceiver_demo_activity_title">BroadcastReceiver Demo</string>
+    <string name="sms_demo_activity_title">短信 Demo</string>
+    <string name="notification_demo_activity_title">通知栏 Demo</string>
+</resources>

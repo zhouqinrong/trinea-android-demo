@@ -19,8 +19,10 @@ import android.widget.ListView;
  */
 public class DemoList extends Activity {
 
-    private String[] mStrings = {"Google Map Demo", "Baidu Map Demo", "Intent Demo", "Service Demo",
-            "BroadcastReceiver Demo", "短信 Demo", "通知栏 Demo"};
+    private static final String[] mStrings = { "Gallery Demo", "ViewPager Demo", "Google Map Demo", "Baidu Map Demo",
+            "Intent Demo", "Service Demo", "BroadcastReceiver Demo", "短信 Demo", "通知栏 Demo" };
+
+    private static final int      total    = mStrings.length - 1;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -37,25 +39,31 @@ public class DemoList extends Activity {
 
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                if (position == 0) {
+                if (position == total - 8) {
+                    Intent intent = new Intent(DemoList.this, GalleryDemo.class);
+                    startActivity(intent);
+                } else if (position == total - 7) {
+                    Intent intent = new Intent(DemoList.this, ViewPagerDemo.class);
+                    startActivity(intent);
+                } else if (position == total - 6) {
                     Intent intent = new Intent(DemoList.this, GoogleMapDemo.class);
                     startActivity(intent);
-                } else if (position == 1) {
+                } else if (position == total - 5) {
                     Intent intent = new Intent(DemoList.this, BaiduMapDemo.class);
                     startActivity(intent);
-                } else if (position == 2) {
+                } else if (position == total - 4) {
                     Intent intent = new Intent(DemoList.this, IntentDemo.class);
                     startActivity(intent);
-                } else if (position == 3) {
+                } else if (position == total - 3) {
                     Intent intent = new Intent(DemoList.this, ServiceDemo.class);
                     startActivity(intent);
-                } else if (position == 4) {
+                } else if (position == total - 2) {
                     Intent intent = new Intent(DemoList.this, BroadcastReceiverDemo.class);
                     startActivity(intent);
-                } else if (position == 5) {
+                } else if (position == total - 1) {
                     Intent intent = new Intent(DemoList.this, SmsManagerDemo.class);
                     startActivity(intent);
-                } else if (position == 6) {
+                } else if (position == total) {
                     Intent intent = new Intent(DemoList.this, NotificationDemo.class);
                     startActivity(intent);
                 }

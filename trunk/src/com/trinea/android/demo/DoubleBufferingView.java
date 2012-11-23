@@ -32,6 +32,6 @@ public class DoubleBufferingView extends View {
 
         Bitmap cache = Bitmap.createBitmap(480, 800, Config.ARGB_8888);
         Canvas mCanvas = new Canvas(cache);
-        mCanvas.drawBitmap((BitmapDrawable)getResources().getDrawable(R.drawable.renren)).get , 0, 0, new Paint());
+//        mCanvas.drawBitmap((BitmapDrawable)getResources().getDrawable(R.drawable.renren)).get , 0, 0, new Paint());
     }
 }

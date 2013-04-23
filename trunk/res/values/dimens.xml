@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <dimen name="pager_margin">45dp</dimen>
+    <dimen name="page_margin">15dp</dimen>
+    <dimen name="dimens_8">8dp</dimen>
+</resources>

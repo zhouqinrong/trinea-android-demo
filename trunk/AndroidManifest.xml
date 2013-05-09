@@ -2,10 +2,10 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="cn.trinea.android.demo"
     android:installLocation="preferExternal"
-    android:versionCode="17"
-    android:versionName="2.2" >
+    android:versionCode="20"
+    android:versionName="2.5" >
 
-    <uses-sdk android:minSdkVersion="11" />
+    <uses-sdk android:minSdkVersion="14" />
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
@@ -14,11 +14,9 @@
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
     <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
-    <uses-permission android:name="android.permission.CALL_PHONE" />
     <uses-permission android:name="android.permission.RECEIVE_SMS" />
     <uses-permission android:name="android.permission.SEND_SMS" />
     <uses-permission android:name="android.permission.BROADCAST_STICKY" />
-    <uses-permission android:name="android.permission.INSTALL_PACKAGES" />
 
     <permission android:name="android.permission.ACCESS_DOWNLOAD_MANAGER" />
 
@@ -28,21 +26,23 @@
         android:theme="@style/AppTheme" >
         <service android:name=".MyService" />
         <service android:name=".MyIntentService" />
-        <service android:name=".MyIntentService2" />
         <service android:name=".MyAIDLService" >
             <intent-filter>
                 <action android:name="cn.trinea.android.demo.remote.MyAIDLServiceAction" />
             </intent-filter>
         </service>
 
+        <!--
         <receiver android:name="MyBroadcastReceiver" >
             <intent-filter>
                 <action android:name="android.provider.Telephony.SMS_RECEIVED" />
             </intent-filter>
         </receiver>
+        -->
 
         <activity
             android:name=".DemoList"
+            android:configChanges="orientation|keyboardHidden"
             android:label="@string/app_name"
             android:theme="@android:style/Theme.Holo.Light.DialogWhenLarge" >
             <intent-filter>
@@ -53,66 +53,55 @@
         </activity>
         <activity
             android:name=".SearchViewDemo"
+            android:configChanges="orientation|keyboardHidden"
             android:label="@string/search_view_demo_activity_title"
             android:theme="@android:style/Theme.Holo.Light.DialogWhenLarge" >
         </activity>
         <activity
             android:name=".ViewPagerMulTiFragmentDemo"
+            android:configChanges="orientation|keyboardHidden"
             android:label="@string/view_pager_multi_fragment_demo_activity_title"
             android:theme="@android:style/Theme.Holo.Light.DialogWhenLarge" >
         </activity>
         <activity
-            android:name=".LogLevelDemo"
-            android:label="@string/log_level_demo_activity_title"
-            android:theme="@android:style/Theme.Holo.Light.DialogWhenLarge" >
-        </activity>
-        <activity
             android:name=".DownloadManagerDemo"
-            android:label="@string/gallery_demo_activity_title"
+            android:configChanges="orientation|keyboardHidden"
+            android:label="@string/download_manager_demo_activity_title"
             android:theme="@android:style/Theme.Holo.Light.DialogWhenLarge" >
         </activity>
         <activity
             android:name=".GalleryDemo"
+            android:configChanges="orientation|keyboardHidden"
             android:label="@string/gallery_demo_activity_title"
             android:theme="@android:style/Theme.Holo.Light.DialogWhenLarge" >
         </activity>
         <activity
             android:name=".ViewPagerDemo"
+            android:configChanges="orientation|keyboardHidden"
             android:label="@string/view_pager_demo_activity_title"
             android:theme="@android:style/Theme.Holo.Light.DialogWhenLarge" >
         </activity>
         <activity
             android:name=".GoogleMapDemo"
+            android:configChanges="orientation|keyboardHidden"
             android:label="@string/google_map_activity_title"
             android:theme="@android:style/Theme.Holo.Light.DialogWhenLarge" >
         </activity>
         <activity
-            android:name=".BaiduMapDemo"
-            android:label="@string/baidu_map_activity_title"
-            android:theme="@android:style/Theme.Holo.Light.DialogWhenLarge" >
-        </activity>
-        <activity
-            android:name=".IntentDemo"
-            android:label="@string/intent_demo_activity_title"
-            android:theme="@android:style/Theme.Holo.Light.DialogWhenLarge" >
-        </activity>
-        <activity
             android:name=".SmsManagerDemo"
+            android:configChanges="orientation|keyboardHidden"
             android:label="@string/sms_demo_activity_title"
             android:theme="@android:style/Theme.Holo.Light.DialogWhenLarge" >
         </activity>
         <activity
-            android:name=".NotificationDemo"
-            android:label="@string/notification_demo_activity_title"
-            android:theme="@android:style/Theme.Holo.Light.DialogWhenLarge" >
-        </activity>
-        <activity
             android:name=".BroadcastReceiverDemo"
+            android:configChanges="orientation|keyboardHidden"
             android:label="@string/broadcastreceiver_demo_activity_title"
             android:theme="@android:style/Theme.Holo.Light.DialogWhenLarge" >
         </activity>
         <activity
             android:name=".ServiceDemo"
+            android:configChanges="orientation|keyboardHidden"
             android:label="@string/service_demo_activity_title"
             android:theme="@android:style/Theme.Holo.Light.DialogWhenLarge" >
         </activity>

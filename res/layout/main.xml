@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent" >
 
@@ -7,8 +7,11 @@
         android:id="@+id/simpleListView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:paddingLeft="@dimen/dimens_8"
-        android:paddingRight="@dimen/dimens_8"
+        android:layout_marginBottom="@dimen/dp_40"
+        android:paddingLeft="@dimen/dp_8"
+        android:paddingRight="@dimen/dp_8"
         android:scrollbarStyle="outsideOverlay" />
 
-</LinearLayout>
+    <include layout="@layout/trinea_info" />
+
+</RelativeLayout>

@@ -2,18 +2,14 @@
 <resources>
 
     <string name="app_name">Trinea Android Demo</string>
-    <string name="log_level_demo_activity_title">Log Level Demo</string>
     <string name="search_view_demo_activity_title">SearchView Demo</string>
     <string name="download_manager_demo_activity_title">DownloadManager Demo</string>
     <string name="gallery_demo_activity_title">Gallery Demo</string>
     <string name="view_pager_demo_activity_title">ViewPager Demo</string>
     <string name="view_pager_multi_fragment_demo_activity_title">ViewPager Multi Fragment Demo</string>
-    <string name="google_map_activity_title">Google Map Demo</string>
     <string name="intent_demo_activity_title">Intent Demo</string>
     <string name="service_demo_activity_title">Service Demo</string>
     <string name="broadcastreceiver_demo_activity_title">BroadcastReceiver Demo</string>
-    <string name="sms_demo_activity_title">短信 Demo</string>
-    <string name="notification_demo_activity_title">通知栏 Demo</string>
     
     <string name="send_general_broadcast">发送广播</string>
     <string name="send_local_broadcast">发送Local广播</string>

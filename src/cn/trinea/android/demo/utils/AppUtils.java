@@ -5,13 +5,11 @@ import android.content.Intent;
 import android.net.Uri;
 import android.text.Html;
 import android.text.Spanned;
-import android.text.method.LinkMovementMethod;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import cn.trinea.android.demo.BroadcastReceiverDemo;
 import cn.trinea.android.demo.DownloadManagerDemo;
-import cn.trinea.android.demo.GoogleMapDemo;
 import cn.trinea.android.demo.R;
 import cn.trinea.android.demo.SearchViewDemo;
 import cn.trinea.android.demo.ServiceDemo;
@@ -30,7 +28,6 @@ public class AppUtils {
 
     public static void initTrineaInfo(final Activity activity, Button trineaInfoTv, Class sourClass) {
         trineaInfoTv = (Button)activity.findViewById(R.id.trineaInfo);
-        trineaInfoTv.setMovementMethod(LinkMovementMethod.getInstance());
         final String[] result = getText(sourClass);
         Spanned text = Html.fromHtml(result[1]);
         trineaInfoTv.setText(text);
@@ -60,9 +57,6 @@ public class AppUtils {
         } else if (sourClass == ViewPagerDemo.class) {
             url = "http://www.cnblogs.com/trinea/archive/2012/11/23/2771273.html";
             name = "ViewPager、Fragment使用";
-        } else if (sourClass == GoogleMapDemo.class) {
-            url = "http://www.cnblogs.com/trinea/archive/2012/11/14/2770433.html";
-            name = "调用Google Map";
         } else if (sourClass == ServiceDemo.class) {
             url = "http://www.cnblogs.com/trinea/archive/2012/11/08/2699856.html";
             name = "Service介绍";

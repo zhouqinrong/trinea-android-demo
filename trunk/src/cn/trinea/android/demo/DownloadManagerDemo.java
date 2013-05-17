@@ -38,15 +38,15 @@ public class DownloadManagerDemo extends Activity {
                                                           + File.separator;
     public static final String     DOWNLOAD_FILE_NAME   = "MeLiShuo.apk";
 
-    // public static final String APK_URL =
-    // "http://img.meilishuo.net/css/images/AndroidShare/Meilishuo_3.6.1_10006.apk";
-    public static final String     APK_URL              = "http://gdown.baidu.com/data/wisegame/283ccd89b3eb717c/wojiaoMT.apk";
+    public static final String     APK_URL              = "http://img.meilishuo.net/css/images/AndroidShare/Meilishuo_3.6.1_10006.apk";
+    // public static final String APK_URL = "http://gdown.baidu.com/data/wisegame/283ccd89b3eb717c/wojiaoMT.apk";
 
     private Button                 downloadButton;
     private ProgressBar            downloadProgress;
     private TextView               downloadTip;
     private TextView               downloadSize;
     private TextView               downloadPrecent;
+    private Button                 downloadCancel;
     private Button                 trineaInfoTv;
 
     private DownloadManager        downloadManager;
@@ -65,6 +65,19 @@ public class DownloadManagerDemo extends Activity {
 
         AppUtils.initTrineaInfo(this, trineaInfoTv, getClass());
 
+        // see android mainfest.xml, accept minetype of com.trinea.download.file
+        Intent intent = getIntent();
+        if (intent != null) {
+            /**
+             * below android 4.2, intent.getDataString() is file:///storage/sdcard1/Trinea/MeLiShuo.apk<br/>
+             * equal or above 4.2 intent.getDataString() is content://media/external/file/29669
+             */
+            Uri data = intent.getData();
+            if (data != null) {
+                Toast.makeText(getApplicationContext(), data.toString(), Toast.LENGTH_LONG).show();
+            }
+        }
+
         context = getApplicationContext();
         handler = new MyHandler();
         downloadManager = (DownloadManager)getSystemService(DOWNLOAD_SERVICE);
@@ -82,6 +95,7 @@ public class DownloadManagerDemo extends Activity {
         bar.setDisplayOptions(ActionBar.DISPLAY_SHOW_TITLE | ActionBar.DISPLAY_HOME_AS_UP);
 
         downloadButton = (Button)findViewById(R.id.download_button);
+        downloadCancel = (Button)findViewById(R.id.download_cancel);
         downloadProgress = (ProgressBar)findViewById(R.id.download_progress);
         downloadTip = (TextView)findViewById(R.id.download_tip);
         downloadTip.setText(getString(R.string.tip_download_file) + DOWNLOAD_FOLDER_NAME);
@@ -90,72 +104,51 @@ public class DownloadManagerDemo extends Activity {
     }
 
     private void initData() {
-        downloadObserver = new DownloadChangeObserver();
-
         /**
          * get download id from preferences.<br/>
          * if download id bigger than 0, means it has been downloaded, then query status and show right text;
          */
         downloadId = PreferencesUtils.getLongPreferences(context,
                                                          PreferencesUtils.KEY_NAME_DOWNLOAD_ID);
-        if (downloadId > 0) {
-            int status = downloadManagerPro.getStatusById(downloadId);
-            if (status == DownloadManager.STATUS_PAUSED || status == DownloadManager.STATUS_PENDING
-                || status == DownloadManager.STATUS_RUNNING) {
-                downloadButton.setText(getString(R.string.app_status_downloading));
-            } else if (status == DownloadManager.STATUS_FAILED) {
-                downloadButton.setText(getString(R.string.app_status_download_fail));
-            } else if (status == DownloadManager.STATUS_SUCCESSFUL) {
-                downloadButton.setText(getString(R.string.app_status_downloaded));
-            } else {
-                downloadButton.setText(getString(R.string.app_status_download));
-            }
-            updateCurrentBytes();
-        } else {
-            downloadButton.setText(getString(R.string.app_status_download));
-        }
-
+        updateView();
         downloadButton.setOnClickListener(new OnClickListener() {
 
             @Override
             public void onClick(View v) {
-                int status = downloadManagerPro.getStatusById(downloadId);
-                /**
-                 * if download status not paused, pedding, running, then download.
-                 */
-                if (status != DownloadManager.STATUS_PAUSED
-                    && status != DownloadManager.STATUS_PENDING
-                    && status != DownloadManager.STATUS_RUNNING) {
-
-                    File folder = new File(DOWNLOAD_FOLDER_NAME);
-                    if (!folder.exists() || !folder.isDirectory()) {
-                        folder.mkdirs();
-                    }
-
-                    DownloadManager.Request request = new DownloadManager.Request(
-                                                                                  Uri.parse(APK_URL));
-                    request.setAllowedNetworkTypes(Request.NETWORK_WIFI | Request.NETWORK_MOBILE);
-                    request.setDestinationInExternalPublicDir(DOWNLOAD_FOLDER_NAME,
-                                                              DOWNLOAD_FILE_NAME);
-                    request.setTitle(getString(R.string.download_notification_title));
-                    request.setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED);
-                    downloadId = downloadManager.enqueue(request);
-                    if (downloadId == -1) {
-                        Toast.makeText(context, getString(R.string.download_fail),
-                                       Toast.LENGTH_SHORT).show();
-                    } else {
-                        Toast.makeText(context, getString(R.string.download_begin),
-                                       Toast.LENGTH_SHORT).show();
-
-                        /** save download id to preferences **/
-                        PreferencesUtils.putLongPreferences(context,
-                                                            PreferencesUtils.KEY_NAME_DOWNLOAD_ID,
-                                                            downloadId);
-                        getContentResolver().registerContentObserver(DownloadManagerPro.CONTENT_URI,
-                                                                     true, downloadObserver);
-                        initData();
-                    }
+                File folder = new File(DOWNLOAD_FOLDER_NAME);
+                if (!folder.exists() || !folder.isDirectory()) {
+                    folder.mkdirs();
                 }
+
+                DownloadManager.Request request = new DownloadManager.Request(Uri.parse(APK_URL));
+                request.setAllowedNetworkTypes(Request.NETWORK_WIFI | Request.NETWORK_MOBILE);
+                request.setDestinationInExternalPublicDir(DOWNLOAD_FOLDER_NAME, DOWNLOAD_FILE_NAME);
+                request.setTitle(getString(R.string.download_notification_title));
+                request.setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED);
+                request.setDescription("meilishuo desc");
+                request.setVisibleInDownloadsUi(false);
+                // request.setShowRunningNotification(false);
+                // request.setNotificationVisibility(DownloadManager.Request.VISIBILITY_HIDDEN);
+                request.setMimeType("application/com.trinea.download.file");
+                downloadId = downloadManager.enqueue(request);
+                if (downloadId == -1) {
+                    Toast.makeText(context, getString(R.string.download_fail), Toast.LENGTH_SHORT)
+                         .show();
+                } else {
+                    /** save download id to preferences **/
+                    PreferencesUtils.putLongPreferences(context,
+                                                        PreferencesUtils.KEY_NAME_DOWNLOAD_ID,
+                                                        downloadId);
+                    updateView();
+                }
+            }
+        });
+        downloadCancel.setOnClickListener(new OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                downloadManager.remove(downloadId);
+                updateView();
             }
         });
     }
@@ -175,9 +168,7 @@ public class DownloadManagerDemo extends Activity {
                                                    if (downloadObserver != null) {
                                                        getContentResolver().unregisterContentObserver(downloadObserver);
                                                    }
-                                                   handler.sendMessage(handler.obtainMessage(0, 0,
-                                                                                             0));
-
+                                                   updateView();
                                                    if (downloadManagerPro.getStatusById(downloadId) == DownloadManager.STATUS_SUCCESSFUL) {
                                                        String apkFilePath = new StringBuilder(
                                                                                               Environment.getExternalStorageDirectory()
@@ -218,16 +209,21 @@ public class DownloadManagerDemo extends Activity {
 
         @Override
         public void onChange(boolean selfChange) {
-            updateCurrentBytes();
+            updateView();
         }
 
     }
 
-    public void updateCurrentBytes() {
-        int[] bytesAndStatus = downloadManagerPro.getBytesAndStatus(downloadId);
-        if (bytesAndStatus[2] != 0) {
-            handler.sendMessage(handler.obtainMessage(0, bytesAndStatus[0], bytesAndStatus[1]));
+    public void updateView() {
+        if (downloadObserver == null) {
+            /** register download change observer **/
+            downloadObserver = new DownloadChangeObserver();
+            getContentResolver().registerContentObserver(DownloadManagerPro.CONTENT_URI, true,
+                                                         downloadObserver);
         }
+        int[] bytesAndStatus = downloadManagerPro.getBytesAndStatus(downloadId);
+        handler.sendMessage(handler.obtainMessage(0, bytesAndStatus[0], bytesAndStatus[1],
+                                                  bytesAndStatus[2]));
     }
 
     /**
@@ -243,17 +239,43 @@ public class DownloadManagerDemo extends Activity {
 
             switch (msg.what) {
                 case 0:
-                    downloadProgress.setVisibility(View.VISIBLE);
-                    if (msg.arg2 < 0) {
-                        downloadProgress.setIndeterminate(true);
-                        downloadPrecent.setText("0%");
-                        downloadSize.setText("0M/0M");
+                    int status = (Integer)msg.obj;
+                    if (isDownloading(status)) {
+                        downloadProgress.setVisibility(View.VISIBLE);
+                        downloadProgress.setMax(0);
+                        downloadProgress.setProgress(0);
+                        downloadButton.setVisibility(View.GONE);
+                        downloadSize.setVisibility(View.VISIBLE);
+                        downloadPrecent.setVisibility(View.VISIBLE);
+                        downloadCancel.setVisibility(View.VISIBLE);
+
+                        if (msg.arg2 < 0) {
+                            downloadProgress.setIndeterminate(true);
+                            downloadPrecent.setText("0%");
+                            downloadSize.setText("0M/0M");
+                        } else {
+                            downloadProgress.setIndeterminate(false);
+                            downloadProgress.setMax(msg.arg2);
+                            downloadProgress.setProgress(msg.arg1);
+                            downloadPrecent.setText(getNotiPercent(msg.arg1, msg.arg2));
+                            downloadSize.setText(getAppSize(msg.arg1) + "/" + getAppSize(msg.arg2));
+                        }
                     } else {
-                        downloadProgress.setIndeterminate(false);
-                        downloadProgress.setMax(msg.arg2);
-                        downloadProgress.setProgress(msg.arg1);
-                        downloadPrecent.setText(getNotiPercent(msg.arg1, msg.arg2));
-                        downloadSize.setText(getAppSize(msg.arg1) + "/" + getAppSize(msg.arg2));
+                        downloadProgress.setVisibility(View.GONE);
+                        downloadProgress.setMax(0);
+                        downloadProgress.setProgress(0);
+                        downloadButton.setVisibility(View.VISIBLE);
+                        downloadSize.setVisibility(View.GONE);
+                        downloadPrecent.setVisibility(View.GONE);
+                        downloadCancel.setVisibility(View.GONE);
+
+                        if (status == DownloadManager.STATUS_FAILED) {
+                            downloadButton.setText(getString(R.string.app_status_download_fail));
+                        } else if (status == DownloadManager.STATUS_SUCCESSFUL) {
+                            downloadButton.setText(getString(R.string.app_status_downloaded));
+                        } else {
+                            downloadButton.setText(getString(R.string.app_status_download));
+                        }
                     }
                     break;
             }
@@ -314,5 +336,11 @@ public class DownloadManagerDemo extends Activity {
             rate = (int)((double)progress / max * 100);
         }
         return new StringBuilder(16).append(rate).append("%").toString();
+    }
+
+    public static boolean isDownloading(int downloadManagerStatus) {
+        return downloadManagerStatus == DownloadManager.STATUS_RUNNING
+               || downloadManagerStatus == DownloadManager.STATUS_PAUSED
+               || downloadManagerStatus == DownloadManager.STATUS_PENDING;
     }
 }

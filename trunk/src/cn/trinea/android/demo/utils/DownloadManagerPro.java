@@ -1,9 +1,6 @@
 package cn.trinea.android.demo.utils;
 
-import java.lang.reflect.Method;
-
 import android.app.DownloadManager;
-import android.app.DownloadManager.Request;
 import android.database.Cursor;
 import android.net.Uri;
 
@@ -42,7 +39,7 @@ public class DownloadManagerPro {
      * <li>result[1] represents total bytes, This will initially be -1.</li>
      * </ul>
      */
-    public int[] getCurrentBytes(long downloadId) {
+    public int[] getDownloadBytes(long downloadId) {
         int[] bytesAndStatus = getBytesAndStatus(downloadId);
         return new int[] { bytesAndStatus[0], bytesAndStatus[1] };
     }
@@ -137,89 +134,6 @@ public class DownloadManagerPro {
      */
     public int getErrorCode(long downloadId) {
         return getInt(downloadId, DownloadManager.COLUMN_REASON);
-    }
-
-    public static class RequestPro extends DownloadManager.Request {
-
-        public static final String METHOD_NAME_SET_NOTI_CLASS  = "setNotiClass";
-        public static final String METHOD_NAME_SET_NOTI_EXTRAS = "setNotiExtras";
-
-        private static boolean     isInitNotiClass             = false;
-        private static boolean     isInitNotiExtras            = false;
-
-        private static Method      setNotiClass                = null;
-        private static Method      setNotiExtras               = null;
-
-        /**
-         * @param uri the HTTP URI to download.
-         */
-        public RequestPro(Uri uri){
-            super(uri);
-        }
-
-        /**
-         * set noti class, only init once
-         * 
-         * @param className full class name
-         */
-        public void setNotiClass(String className) {
-            synchronized (this) {
-
-                if (!isInitNotiClass) {
-                    isInitNotiClass = true;
-                    try {
-                        setNotiClass = Request.class.getMethod(METHOD_NAME_SET_NOTI_CLASS, String.class);
-                    } catch (Exception e) {
-                        // accept all exception
-                        e.printStackTrace();
-                    }
-                }
-            }
-
-            if (setNotiClass != null) {
-                try {
-                    setNotiClass.invoke(this, className);
-                } catch (Exception e) {
-                    /**
-                     * accept all exception, include ClassNotFoundException, NoSuchMethodException,
-                     * InvocationTargetException, NullPointException
-                     */
-                    e.printStackTrace();
-                }
-            }
-        }
-
-        /**
-         * set noti extras, only init once
-         * 
-         * @param extras
-         */
-        public void setNotiExtras(String extras) {
-            synchronized (this) {
-
-                if (!isInitNotiExtras) {
-                    isInitNotiExtras = true;
-                    try {
-                        setNotiExtras = Request.class.getMethod(METHOD_NAME_SET_NOTI_EXTRAS, String.class);
-                    } catch (Exception e) {
-                        // accept all exception
-                        e.printStackTrace();
-                    }
-                }
-            }
-
-            if (setNotiExtras != null) {
-                try {
-                    setNotiExtras.invoke(this, extras);
-                } catch (Exception e) {
-                    /**
-                     * accept all exception, include ClassNotFoundException, NoSuchMethodException,
-                     * InvocationTargetException, NullPointException
-                     */
-                    e.printStackTrace();
-                }
-            }
-        }
     }
 
     /**

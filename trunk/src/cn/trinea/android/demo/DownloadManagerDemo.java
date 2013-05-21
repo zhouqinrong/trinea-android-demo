@@ -6,7 +6,6 @@ import java.text.DecimalFormat;
 import android.app.ActionBar;
 import android.app.Activity;
 import android.app.DownloadManager;
-import android.app.DownloadManager.Request;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -34,12 +33,10 @@ import cn.trinea.android.demo.utils.DownloadManagerPro;
  */
 public class DownloadManagerDemo extends Activity {
 
-    public static final String     DOWNLOAD_FOLDER_NAME = File.separator + "Trinea"
-                                                          + File.separator;
-    public static final String     DOWNLOAD_FILE_NAME   = "MeLiShuo.apk";
+    public static final String     DOWNLOAD_FOLDER_NAME = "Trinea";
+    public static final String     DOWNLOAD_FILE_NAME   = "MeiLiShuo.apk";
 
     public static final String     APK_URL              = "http://img.meilishuo.net/css/images/AndroidShare/Meilishuo_3.6.1_10006.apk";
-    // public static final String APK_URL = "http://gdown.baidu.com/data/wisegame/283ccd89b3eb717c/wojiaoMT.apk";
 
     private Button                 downloadButton;
     private ProgressBar            downloadProgress;
@@ -57,6 +54,7 @@ public class DownloadManagerDemo extends Activity {
     private MyHandler              handler;
 
     private DownloadChangeObserver downloadObserver;
+    private CompleteReceiver       completeReceiver;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,6 +62,11 @@ public class DownloadManagerDemo extends Activity {
         setContentView(R.layout.download_manager_demo);
 
         AppUtils.initTrineaInfo(this, trineaInfoTv, getClass());
+
+        context = getApplicationContext();
+        handler = new MyHandler();
+        downloadManager = (DownloadManager)getSystemService(DOWNLOAD_SERVICE);
+        downloadManagerPro = new DownloadManagerPro(downloadManager);
 
         // see android mainfest.xml, accept minetype of com.trinea.download.file
         Intent intent = getIntent();
@@ -78,16 +81,35 @@ public class DownloadManagerDemo extends Activity {
             }
         }
 
-        context = getApplicationContext();
-        handler = new MyHandler();
-        downloadManager = (DownloadManager)getSystemService(DOWNLOAD_SERVICE);
-        downloadManagerPro = new DownloadManagerPro(downloadManager);
-
         initView();
         initData();
 
+        downloadObserver = new DownloadChangeObserver();
+        completeReceiver = new CompleteReceiver();
         /** register download success broadcast **/
-        registerReceiver(receiver, new IntentFilter(DownloadManager.ACTION_DOWNLOAD_COMPLETE));
+        registerReceiver(completeReceiver,
+                         new IntentFilter(DownloadManager.ACTION_DOWNLOAD_COMPLETE));
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        /** observer download change **/
+        getContentResolver().registerContentObserver(DownloadManagerPro.CONTENT_URI, true,
+                                                     downloadObserver);
+        updateView();
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        getContentResolver().unregisterContentObserver(downloadObserver);
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        unregisterReceiver(completeReceiver);
     }
 
     private void initView() {
@@ -98,7 +120,8 @@ public class DownloadManagerDemo extends Activity {
         downloadCancel = (Button)findViewById(R.id.download_cancel);
         downloadProgress = (ProgressBar)findViewById(R.id.download_progress);
         downloadTip = (TextView)findViewById(R.id.download_tip);
-        downloadTip.setText(getString(R.string.tip_download_file) + DOWNLOAD_FOLDER_NAME);
+        downloadTip.setText(getString(R.string.tip_download_file)
+                            + Environment.getExternalStoragePublicDirectory(DOWNLOAD_FOLDER_NAME));
         downloadSize = (TextView)findViewById(R.id.download_size);
         downloadPrecent = (TextView)findViewById(R.id.download_precent);
     }
@@ -121,26 +144,21 @@ public class DownloadManagerDemo extends Activity {
                 }
 
                 DownloadManager.Request request = new DownloadManager.Request(Uri.parse(APK_URL));
-                request.setAllowedNetworkTypes(Request.NETWORK_WIFI | Request.NETWORK_MOBILE);
                 request.setDestinationInExternalPublicDir(DOWNLOAD_FOLDER_NAME, DOWNLOAD_FILE_NAME);
                 request.setTitle(getString(R.string.download_notification_title));
-                request.setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED);
                 request.setDescription("meilishuo desc");
+                request.setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED);
                 request.setVisibleInDownloadsUi(false);
+                // request.allowScanningByMediaScanner();
+                // request.setAllowedNetworkTypes(DownloadManager.Request.NETWORK_WIFI);
                 // request.setShowRunningNotification(false);
                 // request.setNotificationVisibility(DownloadManager.Request.VISIBILITY_HIDDEN);
                 request.setMimeType("application/com.trinea.download.file");
                 downloadId = downloadManager.enqueue(request);
-                if (downloadId == -1) {
-                    Toast.makeText(context, getString(R.string.download_fail), Toast.LENGTH_SHORT)
-                         .show();
-                } else {
-                    /** save download id to preferences **/
-                    PreferencesUtils.putLongPreferences(context,
-                                                        PreferencesUtils.KEY_NAME_DOWNLOAD_ID,
-                                                        downloadId);
-                    updateView();
-                }
+                /** save download id to preferences **/
+                PreferencesUtils.putLongPreferences(context, PreferencesUtils.KEY_NAME_DOWNLOAD_ID,
+                                                    downloadId);
+                updateView();
             }
         });
         downloadCancel.setOnClickListener(new OnClickListener() {
@@ -152,34 +170,6 @@ public class DownloadManagerDemo extends Activity {
             }
         });
     }
-
-    private BroadcastReceiver receiver = new BroadcastReceiver() {
-
-                                           @Override
-                                           public void onReceive(Context context, Intent intent) {
-                                               /**
-                                                * get the id of download which have download success, if the id is my id
-                                                * and it's status is successful, then install it
-                                                **/
-                                               long completeDownloadId = intent.getLongExtra(DownloadManager.EXTRA_DOWNLOAD_ID,
-                                                                                             -1);
-                                               if (completeDownloadId == downloadId) {
-                                                   initData();
-                                                   if (downloadObserver != null) {
-                                                       getContentResolver().unregisterContentObserver(downloadObserver);
-                                                   }
-                                                   updateView();
-                                                   if (downloadManagerPro.getStatusById(downloadId) == DownloadManager.STATUS_SUCCESSFUL) {
-                                                       String apkFilePath = new StringBuilder(
-                                                                                              Environment.getExternalStorageDirectory()
-                                                                                                         .getAbsolutePath()).append(DOWNLOAD_FOLDER_NAME)
-                                                                                                                            .append(DOWNLOAD_FILE_NAME)
-                                                                                                                            .toString();
-                                                       install(context, apkFilePath);
-                                                   }
-                                               }
-                                           }
-                                       };
 
     /**
      * install app
@@ -214,13 +204,34 @@ public class DownloadManagerDemo extends Activity {
 
     }
 
-    public void updateView() {
-        if (downloadObserver == null) {
-            /** register download change observer **/
-            downloadObserver = new DownloadChangeObserver();
-            getContentResolver().registerContentObserver(DownloadManagerPro.CONTENT_URI, true,
-                                                         downloadObserver);
+    class CompleteReceiver extends BroadcastReceiver {
+
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            /**
+             * get the id of download which have download success, if the id is my id and it's status is successful,
+             * then install it
+             **/
+            long completeDownloadId = intent.getLongExtra(DownloadManager.EXTRA_DOWNLOAD_ID, -1);
+            if (completeDownloadId == downloadId) {
+                initData();
+                updateView();
+                // if download successful, install apk
+                if (downloadManagerPro.getStatusById(downloadId) == DownloadManager.STATUS_SUCCESSFUL) {
+                    String apkFilePath = new StringBuilder(
+                                                           Environment.getExternalStorageDirectory()
+                                                                      .getAbsolutePath()).append(File.separator)
+                                                                                         .append(DOWNLOAD_FOLDER_NAME)
+                                                                                         .append(File.separator)
+                                                                                         .append(DOWNLOAD_FILE_NAME)
+                                                                                         .toString();
+                    install(context, apkFilePath);
+                }
+            }
         }
+    };
+
+    public void updateView() {
         int[] bytesAndStatus = downloadManagerPro.getBytesAndStatus(downloadId);
         handler.sendMessage(handler.obtainMessage(0, bytesAndStatus[0], bytesAndStatus[1],
                                                   bytesAndStatus[2]));
@@ -280,12 +291,6 @@ public class DownloadManagerDemo extends Activity {
                     break;
             }
         }
-    }
-
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        unregisterReceiver(receiver);
     }
 
     @Override

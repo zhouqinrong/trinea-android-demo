@@ -52,7 +52,7 @@ public class AppUtils {
             url = "http://www.trinea.cn/android/viewpager%E5%AE%9E%E7%8E%B0%E7%94%BB%E5%BB%8A%E4%B8%80%E5%B1%8F%E5%A4%9A%E4%B8%AAfragment%E6%95%88%E6%9E%9C/";
             name = "viewpager实现画廊效果";
         } else if (sourClass == DownloadManagerDemo.class) {
-            url = "http://www.trinea.cn";
+            url = "http://www.trinea.cn/android/android系统下载管理downloadmanager功能介绍及使用示例";
             name = "系统下载管理使用";
         } else if (sourClass == ViewPagerDemo.class) {
             url = "http://www.cnblogs.com/trinea/archive/2012/11/23/2771273.html";

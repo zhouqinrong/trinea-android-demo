@@ -74,7 +74,5 @@ public class DemoList extends Activity {
                 }
             }
         });
-
-        startActivity(new Intent(this, DownloadManagerDemo.class));
     }
 }

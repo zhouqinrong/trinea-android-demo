@@ -36,6 +36,6 @@
     <string name="app_status_pending">等待下载</string>
     <string name="app_status_pause">暂停</string>
     <string name="app_status_downloading">下载中</string>
-    <string name="tip_download_file">文件将下载到SD中，路径为：</string>
+    <string name="tip_download_file">文件将下载到：</string>
 
 </resources>

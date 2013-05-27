@@ -2,6 +2,7 @@
 <resources>
 
     <string name="app_name">Trinea Android Demo</string>
+    <string name="borderscrollview_demo_activity_title">BorderScrollView Demo</string>
     <string name="search_view_demo_activity_title">SearchView Demo</string>
     <string name="download_manager_demo_activity_title">DownloadManager Demo</string>
     <string name="gallery_demo_activity_title">Gallery Demo</string>

@@ -23,9 +23,9 @@ public class DemoList extends Activity {
 
     public static final String    TAG      = "DemoList";
 
-    private static final String[] mStrings = { "DownloadManager Demo", "SearchView Demo",
-            "ViewPager Multi Fragment Demo\r\n(ViewPager一屏多Fragment)", "Gallery Demo",
-            "ViewPager Demo", "Service Demo", "BroadcastReceiver Demo" };
+    private static final String[] mStrings = { "BorderScrollViewDemo", "DownloadManager Demo",
+            "SearchView Demo", "ViewPager Multi Fragment Demo\r\n(ViewPager一屏多Fragment)",
+            "Gallery Demo", "ViewPager Demo", "Service Demo", "BroadcastReceiver Demo" };
 
     private static final int      total    = mStrings.length - 1;
 
@@ -50,7 +50,10 @@ public class DemoList extends Activity {
 
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                if (position == total - 6) {
+                if (position == total - 7) {
+                    Intent intent = new Intent(DemoList.this, BorderScrollViewDemo.class);
+                    startActivity(intent);
+                } else if (position == total - 6) {
                     Intent intent = new Intent(DemoList.this, DownloadManagerDemo.class);
                     startActivity(intent);
                 } else if (position == total - 5) {

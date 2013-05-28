@@ -8,6 +8,7 @@ import android.text.Spanned;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
+import cn.trinea.android.demo.BorderScrollViewDemo;
 import cn.trinea.android.demo.BroadcastReceiverDemo;
 import cn.trinea.android.demo.DownloadManagerDemo;
 import cn.trinea.android.demo.R;
@@ -63,6 +64,9 @@ public class AppUtils {
         } else if (sourClass == BroadcastReceiverDemo.class) {
             url = "http://www.cnblogs.com/trinea/archive/2012/11/09/2763182.html";
             name = "BroadcastReceiver介绍";
+        } else if (sourClass == BorderScrollViewDemo.class) {
+            url = "http://www.trinea.cn/?p=445";
+            name = "BorderScrollViewDemo介绍";
         } else {
             prefix = "个人主页:";
             url = "http://www.trinea.cn";

@@ -23,7 +23,7 @@ public class DemoList extends Activity {
 
     public static final String    TAG      = "DemoList";
 
-    private static final String[] mStrings = { "BorderScrollViewDemo", "DownloadManager Demo",
+    private static final String[] mStrings = { "onBottom onTop ScrollView Demo", "DownloadManager Demo",
             "SearchView Demo", "ViewPager Multi Fragment Demo\r\n(ViewPager一屏多Fragment)",
             "Gallery Demo", "ViewPager Demo", "Service Demo", "BroadcastReceiver Demo" };
 

@@ -2,8 +2,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="cn.trinea.android.demo"
     android:installLocation="preferExternal"
-    android:versionCode="24"
-    android:versionName="2.7.2" >
+    android:versionCode="25"
+    android:versionName="2.7.3" >
 
     <uses-sdk android:minSdkVersion="14" />
 

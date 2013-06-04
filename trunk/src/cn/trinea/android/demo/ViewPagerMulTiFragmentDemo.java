@@ -1,30 +1,24 @@
 package cn.trinea.android.demo;
 
 import android.app.ActionBar;
-import android.content.Intent;
 import android.os.Bundle;
-import android.support.v4.app.FragmentActivity;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v4.view.ViewPager.OnPageChangeListener;
-import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnTouchListener;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
-import cn.trinea.android.demo.utils.AppUtils;
 
 /**
  * ViewPager实现画廊效果
  * 
  * @author Trinea 2013-04-03
  */
-public class ViewPagerMulTiFragmentDemo extends FragmentActivity {
+public class ViewPagerMulTiFragmentDemo extends BaseActivity {
 
     private static int     TOTAL_COUNT = 3;
 
@@ -32,14 +26,9 @@ public class ViewPagerMulTiFragmentDemo extends FragmentActivity {
     private ViewPager      viewPager;
     private TextView       indexText;
 
-    private Button         trineaInfoTv;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.view_pager_multi_fragment_demo);
-
-        AppUtils.initTrineaInfo(this, trineaInfoTv, getClass());
+        super.onCreate(savedInstanceState, R.layout.view_pager_multi_fragment_demo);
 
         viewPager = (ViewPager)findViewById(R.id.view_pager);
         indexText = (TextView)findViewById(R.id.view_pager_index);
@@ -101,8 +90,7 @@ public class ViewPagerMulTiFragmentDemo extends FragmentActivity {
 
         @Override
         public void onPageSelected(int position) {
-            indexText.setText(new StringBuilder().append(position + 1).append("/")
-                                                 .append(TOTAL_COUNT));
+            indexText.setText(new StringBuilder().append(position + 1).append("/").append(TOTAL_COUNT));
         }
 
         @Override
@@ -116,16 +104,5 @@ public class ViewPagerMulTiFragmentDemo extends FragmentActivity {
         @Override
         public void onPageScrollStateChanged(int arg0) {
         }
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case android.R.id.home: {
-                onBackPressed();
-                return true;
-            }
-        }
-        return false;
     }
 }

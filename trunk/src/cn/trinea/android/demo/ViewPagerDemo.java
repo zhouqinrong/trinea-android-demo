@@ -45,10 +45,6 @@ public class ViewPagerDemo extends FragmentActivity {
             fragmentList.add(viewPagerFragment1);
         }
 
-        // fragmentList.add(new ViewPagerFragment2());
-        // fragmentList.add(new ViewPagerFragment2());
-        // fragmentList.add(new ViewPagerFragment2());
-        // fragmentList.add(new ViewPagerFragment2());
         vp.setAdapter(new myPagerAdapter(getSupportFragmentManager(), fragmentList, titleList));
 
         ActionBar bar = getActionBar();
@@ -65,8 +61,7 @@ public class ViewPagerDemo extends FragmentActivity {
         private List<Fragment> fragmentList;
         private List<String>   titleList;
 
-        public myPagerAdapter(FragmentManager fm, List<Fragment> fragmentList,
-                              List<String> titleList){
+        public myPagerAdapter(FragmentManager fm, List<Fragment> fragmentList, List<String> titleList){
             super(fm);
             this.fragmentList = fragmentList;
             this.titleList = titleList;
@@ -77,8 +72,7 @@ public class ViewPagerDemo extends FragmentActivity {
          */
         @Override
         public Fragment getItem(int arg0) {
-            return (fragmentList == null || fragmentList.size() == 0) ? null
-                : fragmentList.get(arg0);
+            return (fragmentList == null || fragmentList.size() == 0) ? null : fragmentList.get(arg0);
         }
 
         /**

@@ -1,16 +1,10 @@
 package cn.trinea.android.demo;
 
-import android.app.ActionBar;
-import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Display;
-import android.view.MenuItem;
-import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
-import cn.trinea.android.demo.utils.AppUtils;
 
 import com.trinea.android.common.view.BorderScrollView;
 import com.trinea.android.common.view.BorderScrollView.OnBorderListener;
@@ -20,26 +14,19 @@ import com.trinea.android.common.view.BorderScrollView.OnBorderListener;
  * 
  * @author Trinea 2013-5-27
  */
-public class BorderScrollViewDemo extends Activity {
+public class BorderScrollViewDemo extends BaseActivity {
 
     private BorderScrollView borderScrollView;
     private TextView         textView1;
     private TextView         textView2;
 
-    private Button           trineaInfoTv;
-
     private Context          context;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.border_scroll_view_demo);
+        super.onCreate(savedInstanceState, R.layout.border_scroll_view_demo);
 
         context = getApplicationContext();
-        AppUtils.initTrineaInfo(this, trineaInfoTv, getClass());
-
-        ActionBar bar = getActionBar();
-        bar.setDisplayOptions(ActionBar.DISPLAY_SHOW_TITLE | ActionBar.DISPLAY_HOME_AS_UP);
 
         borderScrollView = (BorderScrollView)findViewById(R.id.scroll_view);
         borderScrollView.setOnBorderListener(new OnBorderListener() {
@@ -62,16 +49,5 @@ public class BorderScrollViewDemo extends Activity {
         Display display = getWindowManager().getDefaultDisplay();
         textView1.setHeight(display.getHeight() / 2);
         textView2.setHeight(display.getHeight() / 2);
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case android.R.id.home: {
-                onBackPressed();
-                return true;
-            }
-        }
-        return false;
     }
 }

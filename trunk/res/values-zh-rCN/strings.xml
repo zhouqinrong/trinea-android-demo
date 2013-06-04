@@ -27,5 +27,7 @@
     <string name="app_status_pause">暂停</string>
     <string name="app_status_downloading">下载中</string>
     <string name="tip_download_file">文件将下载到：</string>
+    
+    <string name="update_at">更新于:&#160;</string>
 
 </resources>

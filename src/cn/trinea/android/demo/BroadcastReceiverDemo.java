@@ -7,7 +7,6 @@
  */
 package cn.trinea.android.demo;
 
-import android.app.ActionBar;
 import android.app.Activity;
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -15,19 +14,17 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
 import android.os.Handler;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.Toast;
-import cn.trinea.android.demo.utils.AppUtils;
 
 /**
  * BroadcastReceiver Demo，包括普通广播、本地广播、有序广播、粘性广播
  * 
  * @author Trinea 2012-9-20 上午10:51:01
  */
-public class BroadcastReceiverDemo extends Activity {
+public class BroadcastReceiverDemo extends BaseActivity {
 
     private final static String                    ACTION_GENERAL_SEND = "cn.trinea.android.demo.BroadcastReceiverDemo.sendGeneralBroadcast";
     private final static String                    ACTION_LOCAL_SEND   = "cn.trinea.android.demo.BroadcastReceiverDemo.sendLocalBroadcast";
@@ -49,17 +46,9 @@ public class BroadcastReceiverDemo extends Activity {
     private Button                                 sendOrderedBtn;
     private Button                                 sendStickyBtn;
 
-    private Button                                 trineaInfoTv;
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.broadcast_receiver_demo);
-
-        AppUtils.initTrineaInfo(this, trineaInfoTv, getClass());
-
-        ActionBar bar = getActionBar();
-        bar.setDisplayOptions(ActionBar.DISPLAY_SHOW_TITLE | ActionBar.DISPLAY_HOME_AS_UP);
+        super.onCreate(savedInstanceState, R.layout.broadcast_receiver_demo);
 
         generalReceiver = new MyBroadcastReceiver();
         orderedReceiverHigh = new OrderedBroadcastReceiverPriorityHigh();
@@ -96,8 +85,8 @@ public class BroadcastReceiverDemo extends Activity {
                 Intent i = new Intent(ACTION_ORDERED_SEND);
                 i.putExtra(MSG_KEY, "有序广播告知好声音马上开始了啦");
                 // 发送本地广播，设置最终接受广播的Receiver
-                sendOrderedBroadcast(i, null, new OrderedBroadcastReceiverResultReceiver(), null,
-                                     Activity.RESULT_OK, null, null);
+                sendOrderedBroadcast(i, null, new OrderedBroadcastReceiverResultReceiver(), null, Activity.RESULT_OK,
+                                     null, null);
             }
         });
 
@@ -162,8 +151,7 @@ public class BroadcastReceiverDemo extends Activity {
 
         @Override
         public void onReceive(Context context, Intent intent) {
-            Toast.makeText(context, "优先级最高的接收者接收到广播，内容为：" + intent.getStringExtra(MSG_KEY),
-                           Toast.LENGTH_SHORT).show();
+            Toast.makeText(context, "优先级最高的接收者接收到广播，内容为：" + intent.getStringExtra(MSG_KEY), Toast.LENGTH_SHORT).show();
             // 修改广播结果
             getResultExtras(true).putString(RUSULT_MSG_KEY, "High");
         }
@@ -175,8 +163,7 @@ public class BroadcastReceiverDemo extends Activity {
         public void onReceive(Context context, Intent intent) {
             Toast.makeText(context,
                            "优先级中等的接收者接收到广播，内容为：" + intent.getStringExtra(MSG_KEY) + "，上一个接收者为："
-                                   + getResultExtras(true).getString(RUSULT_MSG_KEY),
-                           Toast.LENGTH_SHORT).show();
+                                   + getResultExtras(true).getString(RUSULT_MSG_KEY), Toast.LENGTH_SHORT).show();
             getResultExtras(true).putString(RUSULT_MSG_KEY, "Medium");
             // 取消广播
             abortBroadcast();
@@ -189,8 +176,7 @@ public class BroadcastReceiverDemo extends Activity {
         public void onReceive(Context context, Intent intent) {
             Toast.makeText(context,
                            "优先级最低的接收者接收到广播，内容为：" + intent.getStringExtra(MSG_KEY) + "，上一个接收者为："
-                                   + getResultExtras(true).getString(RUSULT_MSG_KEY),
-                           Toast.LENGTH_SHORT).show();
+                                   + getResultExtras(true).getString(RUSULT_MSG_KEY), Toast.LENGTH_SHORT).show();
             getResultExtras(true).putString(RUSULT_MSG_KEY, "Low");
         }
     }
@@ -201,19 +187,7 @@ public class BroadcastReceiverDemo extends Activity {
         public void onReceive(Context context, Intent intent) {
             Toast.makeText(context,
                            "结果接收者接收到广播，内容为：" + intent.getStringExtra(MSG_KEY) + "，上一个接收者为："
-                                   + getResultExtras(true).getString(RUSULT_MSG_KEY),
-                           Toast.LENGTH_SHORT).show();
+                                   + getResultExtras(true).getString(RUSULT_MSG_KEY), Toast.LENGTH_SHORT).show();
         }
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case android.R.id.home: {
-                onBackPressed();
-                return true;
-            }
-        }
-        return false;
     }
 }

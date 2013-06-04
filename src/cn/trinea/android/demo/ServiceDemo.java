@@ -8,27 +8,24 @@
 package cn.trinea.android.demo;
 
 import android.app.ActionBar;
-import android.app.Activity;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
 import android.os.Bundle;
 import android.os.IBinder;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.Toast;
 import cn.trinea.android.demo.MyService.MyBinder;
-import cn.trinea.android.demo.utils.AppUtils;
 
 /**
  * ServiceDemo，包括start普通服务、绑定普通服务、Intent Service
  * 
  * @author Trinea 2013-5-9
  */
-public class ServiceDemo extends Activity {
+public class ServiceDemo extends BaseActivity {
 
     private MyService         myService;
     private Intent            myServiceIntent;
@@ -48,7 +45,6 @@ public class ServiceDemo extends Activity {
     private Button            startAIDLServiceBtn;
     private Button            stopAIDLServiceBtn;
 
-    private Button            trineaInfoTv;
     private ServiceConnection con = new ServiceConnection() {
 
                                       /**
@@ -56,30 +52,23 @@ public class ServiceDemo extends Activity {
                                        */
                                       @Override
                                       public void onServiceDisconnected(ComponentName name) {
-                                          Toast.makeText(getApplicationContext(),
-                                                         "Service disconnect", Toast.LENGTH_SHORT)
-                                               .show();
+                                          Toast.makeText(getApplicationContext(), "Service disconnect",
+                                                         Toast.LENGTH_SHORT).show();
                                       }
 
                                       /**
                                        * 服务连接时调用，若已经连接不进行调用
                                        */
                                       @Override
-                                      public void onServiceConnected(ComponentName name,
-                                                                     IBinder service) {
+                                      public void onServiceConnected(ComponentName name, IBinder service) {
                                           myService = ((MyBinder)service).getService();
-                                          Toast.makeText(getApplicationContext(),
-                                                         "Service Connect", Toast.LENGTH_SHORT)
-                                               .show();
+                                          Toast.makeText(getApplicationContext(), "Service Connect", Toast.LENGTH_SHORT).show();
                                       }
                                   };
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.service_demo);
-
-        AppUtils.initTrineaInfo(this, trineaInfoTv, getClass());
+        super.onCreate(savedInstanceState, R.layout.service_demo);
 
         ActionBar bar = getActionBar();
         bar.setDisplayOptions(ActionBar.DISPLAY_SHOW_TITLE | ActionBar.DISPLAY_HOME_AS_UP);
@@ -132,9 +121,8 @@ public class ServiceDemo extends Activity {
             @Override
             public void onClick(View v) {
                 if (myService != null) {
-                    Toast.makeText(getApplicationContext(),
-                                   "增加成功，当前值为：" + myService.increaseCount(), Toast.LENGTH_SHORT)
-                         .show();
+                    Toast.makeText(getApplicationContext(), "增加成功，当前值为：" + myService.increaseCount(),
+                                   Toast.LENGTH_SHORT).show();
                 } else {
                     Toast.makeText(getApplicationContext(), "请先绑定服务。", Toast.LENGTH_SHORT).show();
                 }
@@ -147,9 +135,7 @@ public class ServiceDemo extends Activity {
             @Override
             public void onClick(View v) {
                 if (myService != null) {
-                    Toast.makeText(getApplicationContext(),
-                                   "Service count:" + myService.getCount(), Toast.LENGTH_SHORT)
-                         .show();
+                    Toast.makeText(getApplicationContext(), "Service count:" + myService.getCount(), Toast.LENGTH_SHORT).show();
                 } else {
                     Toast.makeText(getApplicationContext(), "请先绑定服务。", Toast.LENGTH_SHORT).show();
                 }
@@ -195,16 +181,5 @@ public class ServiceDemo extends Activity {
     @Override
     public void onResume() {
         super.onResume();
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case android.R.id.home: {
-                onBackPressed();
-                return true;
-            }
-        }
-        return false;
     }
 }

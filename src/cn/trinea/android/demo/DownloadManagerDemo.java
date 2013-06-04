@@ -3,8 +3,6 @@ package cn.trinea.android.demo;
 import java.io.File;
 import java.text.DecimalFormat;
 
-import android.app.ActionBar;
-import android.app.Activity;
 import android.app.DownloadManager;
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -16,14 +14,12 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
 import android.os.Message;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
-import cn.trinea.android.demo.utils.AppUtils;
 import cn.trinea.android.demo.utils.DownloadManagerPro;
 
 /**
@@ -31,7 +27,7 @@ import cn.trinea.android.demo.utils.DownloadManagerPro;
  * 
  * @author Trinea 2013-5-9
  */
-public class DownloadManagerDemo extends Activity {
+public class DownloadManagerDemo extends BaseActivity {
 
     public static final String     DOWNLOAD_FOLDER_NAME = "Trinea";
     public static final String     DOWNLOAD_FILE_NAME   = "MeiLiShuo.apk";
@@ -44,7 +40,6 @@ public class DownloadManagerDemo extends Activity {
     private TextView               downloadSize;
     private TextView               downloadPrecent;
     private Button                 downloadCancel;
-    private Button                 trineaInfoTv;
 
     private DownloadManager        downloadManager;
     private DownloadManagerPro     downloadManagerPro;
@@ -58,10 +53,7 @@ public class DownloadManagerDemo extends Activity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.download_manager_demo);
-
-        AppUtils.initTrineaInfo(this, trineaInfoTv, getClass());
+        super.onCreate(savedInstanceState, R.layout.download_manager_demo);
 
         context = getApplicationContext();
         handler = new MyHandler();
@@ -87,16 +79,14 @@ public class DownloadManagerDemo extends Activity {
         downloadObserver = new DownloadChangeObserver();
         completeReceiver = new CompleteReceiver();
         /** register download success broadcast **/
-        registerReceiver(completeReceiver,
-                         new IntentFilter(DownloadManager.ACTION_DOWNLOAD_COMPLETE));
+        registerReceiver(completeReceiver, new IntentFilter(DownloadManager.ACTION_DOWNLOAD_COMPLETE));
     }
 
     @Override
     protected void onResume() {
         super.onResume();
         /** observer download change **/
-        getContentResolver().registerContentObserver(DownloadManagerPro.CONTENT_URI, true,
-                                                     downloadObserver);
+        getContentResolver().registerContentObserver(DownloadManagerPro.CONTENT_URI, true, downloadObserver);
         updateView();
     }
 
@@ -113,9 +103,6 @@ public class DownloadManagerDemo extends Activity {
     }
 
     private void initView() {
-        ActionBar bar = getActionBar();
-        bar.setDisplayOptions(ActionBar.DISPLAY_SHOW_TITLE | ActionBar.DISPLAY_HOME_AS_UP);
-
         downloadButton = (Button)findViewById(R.id.download_button);
         downloadCancel = (Button)findViewById(R.id.download_cancel);
         downloadProgress = (ProgressBar)findViewById(R.id.download_progress);
@@ -131,8 +118,7 @@ public class DownloadManagerDemo extends Activity {
          * get download id from preferences.<br/>
          * if download id bigger than 0, means it has been downloaded, then query status and show right text;
          */
-        downloadId = PreferencesUtils.getLongPreferences(context,
-                                                         PreferencesUtils.KEY_NAME_DOWNLOAD_ID);
+        downloadId = PreferencesUtils.getLongPreferences(context, PreferencesUtils.KEY_NAME_DOWNLOAD_ID);
         updateView();
         downloadButton.setOnClickListener(new OnClickListener() {
 
@@ -156,8 +142,7 @@ public class DownloadManagerDemo extends Activity {
                 request.setMimeType("application/com.trinea.download.file");
                 downloadId = downloadManager.enqueue(request);
                 /** save download id to preferences **/
-                PreferencesUtils.putLongPreferences(context, PreferencesUtils.KEY_NAME_DOWNLOAD_ID,
-                                                    downloadId);
+                PreferencesUtils.putLongPreferences(context, PreferencesUtils.KEY_NAME_DOWNLOAD_ID, downloadId);
                 updateView();
             }
         });
@@ -182,8 +167,7 @@ public class DownloadManagerDemo extends Activity {
         Intent i = new Intent(Intent.ACTION_VIEW);
         File file = new File(filePath);
         if (file != null && file.length() > 0 && file.exists() && file.isFile()) {
-            i.setDataAndType(Uri.parse("file://" + filePath),
-                             "application/vnd.android.package-archive");
+            i.setDataAndType(Uri.parse("file://" + filePath), "application/vnd.android.package-archive");
             i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             context.startActivity(i);
             return true;
@@ -218,13 +202,7 @@ public class DownloadManagerDemo extends Activity {
                 updateView();
                 // if download successful, install apk
                 if (downloadManagerPro.getStatusById(downloadId) == DownloadManager.STATUS_SUCCESSFUL) {
-                    String apkFilePath = new StringBuilder(
-                                                           Environment.getExternalStorageDirectory()
-                                                                      .getAbsolutePath()).append(File.separator)
-                                                                                         .append(DOWNLOAD_FOLDER_NAME)
-                                                                                         .append(File.separator)
-                                                                                         .append(DOWNLOAD_FILE_NAME)
-                                                                                         .toString();
+                    String apkFilePath = new StringBuilder(Environment.getExternalStorageDirectory().getAbsolutePath()).append(File.separator).append(DOWNLOAD_FOLDER_NAME).append(File.separator).append(DOWNLOAD_FILE_NAME).toString();
                     install(context, apkFilePath);
                 }
             }
@@ -233,8 +211,7 @@ public class DownloadManagerDemo extends Activity {
 
     public void updateView() {
         int[] bytesAndStatus = downloadManagerPro.getBytesAndStatus(downloadId);
-        handler.sendMessage(handler.obtainMessage(0, bytesAndStatus[0], bytesAndStatus[1],
-                                                  bytesAndStatus[2]));
+        handler.sendMessage(handler.obtainMessage(0, bytesAndStatus[0], bytesAndStatus[1], bytesAndStatus[2]));
     }
 
     /**
@@ -293,17 +270,6 @@ public class DownloadManagerDemo extends Activity {
         }
     }
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case android.R.id.home: {
-                onBackPressed();
-                return true;
-            }
-        }
-        return false;
-    }
-
     static final DecimalFormat DOUBLE_DECIMAL_FORMAT = new DecimalFormat("0.##");
 
     public static final int    MB_2_BYTE             = 1024 * 1024;
@@ -319,13 +285,9 @@ public class DownloadManagerDemo extends Activity {
         }
 
         if (size >= MB_2_BYTE) {
-            return new StringBuilder(16).append(DOUBLE_DECIMAL_FORMAT.format((double)size
-                                                                             / MB_2_BYTE))
-                                        .append("M");
+            return new StringBuilder(16).append(DOUBLE_DECIMAL_FORMAT.format((double)size / MB_2_BYTE)).append("M");
         } else if (size >= KB_2_BYTE) {
-            return new StringBuilder(16).append(DOUBLE_DECIMAL_FORMAT.format((double)size
-                                                                             / KB_2_BYTE))
-                                        .append("K");
+            return new StringBuilder(16).append(DOUBLE_DECIMAL_FORMAT.format((double)size / KB_2_BYTE)).append("K");
         } else {
             return size + "B";
         }

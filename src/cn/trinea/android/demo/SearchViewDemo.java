@@ -7,7 +7,6 @@ import java.util.concurrent.TimeUnit;
 
 import android.app.ActionBar;
 import android.app.ActionBar.LayoutParams;
-import android.app.Activity;
 import android.content.Context;
 import android.os.Build;
 import android.os.Bundle;
@@ -16,22 +15,19 @@ import android.os.Message;
 import android.view.Display;
 import android.view.Gravity;
 import android.view.LayoutInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
-import android.widget.Button;
 import android.widget.SearchView;
 import android.widget.SearchView.OnCloseListener;
 import android.widget.TextView;
-import cn.trinea.android.demo.utils.AppUtils;
 
 /**
  * SearchViewDemo
  * 
  * @author Trinea 2013-5-9
  */
-public class SearchViewDemo extends Activity {
+public class SearchViewDemo extends BaseActivity {
 
     private SearchView               searchView;
     private MyHandler                handler;
@@ -41,16 +37,12 @@ public class SearchViewDemo extends Activity {
     private String                   currentSearchTip;
 
     private TextView                 searchInfo;
-    private Button                   trineaInfoTv;
 
     private InputMethodManager       inputMethodManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.search_view_demo);
-
-        AppUtils.initTrineaInfo(this, trineaInfoTv, getClass());
+        super.onCreate(savedInstanceState, R.layout.search_view_demo);
 
         inputMethodManager = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
         handler = new MyHandler();
@@ -97,11 +89,9 @@ public class SearchViewDemo extends Activity {
             }
         });
         Display display = getWindowManager().getDefaultDisplay();
-        LayoutParams params = new LayoutParams(
-                                               display.getWidth()
-                                                       - getResources().getDimensionPixelSize(R.dimen.search_view_margin_left),
-                                               LayoutParams.WRAP_CONTENT, Gravity.CENTER_VERTICAL
-                                                                          | Gravity.RIGHT);
+        LayoutParams params = new LayoutParams(display.getWidth()
+                                               - getResources().getDimensionPixelSize(R.dimen.search_view_margin_left),
+                                               LayoutParams.WRAP_CONTENT, Gravity.CENTER_VERTICAL | Gravity.RIGHT);
         bar.setCustomView(customActionBarView, params);
 
         // show keyboard
@@ -134,17 +124,6 @@ public class SearchViewDemo extends Activity {
         return scheduledExecutor.schedule(command, delayTimeMills, TimeUnit.MILLISECONDS);
     }
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case android.R.id.home: {
-                onBackPressed();
-                return true;
-            }
-        }
-        return false;
-    }
-
     private class MyHandler extends Handler {
 
         @Override
@@ -168,8 +147,7 @@ public class SearchViewDemo extends Activity {
                 return;
             }
 
-            inputMethodManager.hideSoftInputFromWindow(v.getWindowToken(),
-                                                       InputMethodManager.HIDE_NOT_ALWAYS);
+            inputMethodManager.hideSoftInputFromWindow(v.getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
             searchView.clearFocus();
         }
     }

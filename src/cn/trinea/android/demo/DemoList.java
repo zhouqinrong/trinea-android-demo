@@ -3,46 +3,40 @@ package cn.trinea.android.demo;
 import java.util.Arrays;
 import java.util.LinkedList;
 
-import android.app.Activity;
+import android.app.ActionBar;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.ListView;
-import cn.trinea.android.demo.utils.AppUtils;
 
 /**
  * demo list 列表
  * 
  * @author Trinea 2012-6-17 下午06:14:57
  */
-public class DemoList extends Activity {
+public class DemoList extends BaseActivity {
 
     public static final String    TAG      = "DemoList";
 
-    private static final String[] mStrings = { "onBottom onTop ScrollView Demo", "DownloadManager Demo",
-            "SearchView Demo", "ViewPager Multi Fragment Demo\r\n(ViewPager一屏多Fragment)",
+    private static final String[] mStrings = { "DropDownListViewDemo", "onBottom onTop ScrollView Demo",
+            "DownloadManager Demo", "SearchView Demo", "ViewPager Multi Fragment Demo\r\n(ViewPager一屏多Fragment)",
             "Gallery Demo", "ViewPager Demo", "Service Demo", "BroadcastReceiver Demo" };
 
     private static final int      total    = mStrings.length - 1;
 
-    private Button                trineaInfoTv;
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.demo_list);
+        super.onCreate(savedInstanceState, R.layout.demo_list);
 
-        AppUtils.initTrineaInfo(this, trineaInfoTv, getClass());
+        ActionBar bar = getActionBar();
+        bar.setDisplayOptions(ActionBar.DISPLAY_SHOW_TITLE | ActionBar.DISPLAY_SHOW_HOME);
+
         LinkedList<String> mListItems = new LinkedList<String>();
         mListItems.addAll(Arrays.asList(mStrings));
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(
-                                                                this,
-                                                                android.R.layout.simple_list_item_1,
-                                                                mListItems);
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, mListItems);
 
         ListView demoListView = (ListView)findViewById(R.id.simpleListView);
         demoListView.setAdapter(adapter);
@@ -50,7 +44,10 @@ public class DemoList extends Activity {
 
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                if (position == total - 7) {
+                if (position == total - 8) {
+                    Intent intent = new Intent(DemoList.this, DropDownListViewDemo.class);
+                    startActivity(intent);
+                } else if (position == total - 7) {
                     Intent intent = new Intent(DemoList.this, BorderScrollViewDemo.class);
                     startActivity(intent);
                 } else if (position == total - 6) {
@@ -77,5 +74,7 @@ public class DemoList extends Activity {
                 }
             }
         });
+        
+        startActivity(new Intent(this, DropDownListViewDemo.class));
     }
 }

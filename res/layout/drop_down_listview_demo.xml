@@ -4,15 +4,15 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent" >
 
-    <com.trinea.android.common.view.DropDownListView
+    <cn.trinea.android.common.view.DropDownListView
         android:id="@+id/list_view"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:drawSelectorOnTop="false"
         android:paddingBottom="@dimen/dp_40"
-        listViewAttr:isAutoLoadMore="true"
         listViewAttr:isDropDownStyle="true"
-        listViewAttr:isLoadMoreStyle="true" />
+        listViewAttr:isOnBottomStyle="true"
+        listViewAttr:isAutoLoadOnBottom="true" />
 
     <include layout="@layout/trinea_info" />
 

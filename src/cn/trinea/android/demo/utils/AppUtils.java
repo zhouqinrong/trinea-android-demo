@@ -14,6 +14,7 @@ import cn.trinea.android.demo.DownloadManagerDemo;
 import cn.trinea.android.demo.R;
 import cn.trinea.android.demo.SearchViewDemo;
 import cn.trinea.android.demo.ServiceDemo;
+import cn.trinea.android.demo.SlideOnePageGalleryDemo;
 import cn.trinea.android.demo.ViewPagerDemo;
 import cn.trinea.android.demo.ViewPagerMulTiFragmentDemo;
 
@@ -55,6 +56,9 @@ public class AppUtils {
         } else if (sourClass == DownloadManagerDemo.class) {
             url = "http://www.trinea.cn/android/android系统下载管理downloadmanager功能介绍及使用示例";
             name = "系统下载管理使用";
+        } else if (sourClass == SlideOnePageGalleryDemo.class) {
+            url = "http://www.trinea.cn/android/gallery滑动一页一个item效果/";
+            name = "Gallery滑动一页(一个Item)效果";
         } else if (sourClass == ViewPagerDemo.class) {
             url = "http://www.cnblogs.com/trinea/archive/2012/11/23/2771273.html";
             name = "ViewPager、Fragment使用";
@@ -77,7 +81,7 @@ public class AppUtils {
     }
 
     private static String getUrlInfo(String prefix, String url, String name) {
-        return new StringBuilder().append(prefix == null ? ABOUT : prefix).append("<a href=\"")
-                                  .append(url).append("\">").append(name).append("</a>").toString();
+        return new StringBuilder().append(prefix == null ? ABOUT : prefix).append("<a href=\"").append(url)
+                                  .append("\">").append(name).append("</a>").toString();
     }
 }

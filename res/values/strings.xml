@@ -7,7 +7,7 @@
     <string name="borderscrollview_demo_activity_title">onBottom onTop ScrollView Demo</string>
     <string name="search_view_demo_activity_title">SearchView Demo</string>
     <string name="download_manager_demo_activity_title">DownloadManager Demo</string>
-    <string name="gallery_demo_activity_title">Gallery Demo</string>
+    <string name="slide_one_page_gallery_demo_activity_title">Slide One Page Gallery Demo</string>
     <string name="view_pager_demo_activity_title">ViewPager Demo</string>
     <string name="view_pager_multi_fragment_demo_activity_title">ViewPager Multi Fragment Demo</string>
     <string name="intent_demo_activity_title">Intent Demo</string>

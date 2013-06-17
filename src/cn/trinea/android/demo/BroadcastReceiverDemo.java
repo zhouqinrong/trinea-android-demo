@@ -22,7 +22,7 @@ import android.widget.Toast;
 /**
  * BroadcastReceiver Demo，包括普通广播、本地广播、有序广播、粘性广播
  * 
- * @author Trinea 2012-9-20 上午10:51:01
+ * @author Trinea 2012-9-20
  */
 public class BroadcastReceiverDemo extends BaseActivity {
 

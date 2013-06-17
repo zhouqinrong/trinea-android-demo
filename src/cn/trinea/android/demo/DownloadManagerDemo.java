@@ -60,7 +60,7 @@ public class DownloadManagerDemo extends BaseActivity {
         downloadManager = (DownloadManager)getSystemService(DOWNLOAD_SERVICE);
         downloadManagerPro = new DownloadManagerPro(downloadManager);
 
-        // see android mainfest.xml, accept minetype of com.trinea.download.file
+        // see android mainfest.xml, accept minetype of cn.trinea.download.file
         Intent intent = getIntent();
         if (intent != null) {
             /**
@@ -139,7 +139,7 @@ public class DownloadManagerDemo extends BaseActivity {
                 // request.setAllowedNetworkTypes(DownloadManager.Request.NETWORK_WIFI);
                 // request.setShowRunningNotification(false);
                 // request.setNotificationVisibility(DownloadManager.Request.VISIBILITY_HIDDEN);
-                request.setMimeType("application/com.trinea.download.file");
+                request.setMimeType("application/cn.trinea.download.file");
                 downloadId = downloadManager.enqueue(request);
                 /** save download id to preferences **/
                 PreferencesUtils.putLongPreferences(context, PreferencesUtils.KEY_NAME_DOWNLOAD_ID, downloadId);
@@ -202,7 +202,11 @@ public class DownloadManagerDemo extends BaseActivity {
                 updateView();
                 // if download successful, install apk
                 if (downloadManagerPro.getStatusById(downloadId) == DownloadManager.STATUS_SUCCESSFUL) {
-                    String apkFilePath = new StringBuilder(Environment.getExternalStorageDirectory().getAbsolutePath()).append(File.separator).append(DOWNLOAD_FOLDER_NAME).append(File.separator).append(DOWNLOAD_FILE_NAME).toString();
+                    String apkFilePath = new StringBuilder(Environment.getExternalStorageDirectory().getAbsolutePath()).append(File.separator)
+                                                                                                                       .append(DOWNLOAD_FOLDER_NAME)
+                                                                                                                       .append(File.separator)
+                                                                                                                       .append(DOWNLOAD_FILE_NAME)
+                                                                                                                       .toString();
                     install(context, apkFilePath);
                 }
             }

@@ -2,8 +2,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="cn.trinea.android.demo"
     android:installLocation="preferExternal"
-    android:versionCode="26"
-    android:versionName="2.8.3" >
+    android:versionCode="27"
+    android:versionName="2.9.3" >
 
     <uses-sdk android:minSdkVersion="14" />
 
@@ -45,7 +45,7 @@
 
                 <category android:name="android.intent.category.DEFAULT" />
 
-                <data android:mimeType="application/com.trinea.download.file" />
+                <data android:mimeType="application/cn.trinea.download.file" />
             </intent-filter>
         </activity>
         <activity
@@ -73,9 +73,9 @@
             android:theme="@android:style/Theme.Holo.Light.DialogWhenLarge" >
         </activity>
         <activity
-            android:name=".GalleryDemo"
+            android:name=".SlideOnePageGalleryDemo"
             android:configChanges="orientation|keyboardHidden"
-            android:label="@string/gallery_demo_activity_title"
+            android:label="@string/slide_one_page_gallery_demo_activity_title"
             android:theme="@android:style/Theme.Holo.Light.DialogWhenLarge" >
         </activity>
         <activity

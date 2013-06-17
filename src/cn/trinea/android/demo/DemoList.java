@@ -3,9 +3,12 @@ package cn.trinea.android.demo;
 import java.util.Arrays;
 import java.util.LinkedList;
 
+import cn.trinea.android.common.service.impl.ImageCache;
+
 import android.app.ActionBar;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
@@ -13,9 +16,9 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
 /**
- * demo list 列表
+ * demo list list
  * 
- * @author Trinea 2012-6-17 下午06:14:57
+ * @author Trinea 2012-6-17
  */
 public class DemoList extends BaseActivity {
 
@@ -23,7 +26,7 @@ public class DemoList extends BaseActivity {
 
     private static final String[] mStrings = { "DropDownListViewDemo", "onBottom onTop ScrollView Demo",
             "DownloadManager Demo", "SearchView Demo", "ViewPager Multi Fragment Demo\r\n(ViewPager一屏多Fragment)",
-            "Gallery Demo", "ViewPager Demo", "Service Demo", "BroadcastReceiver Demo" };
+            "Slide One Page Gallery Demo", "ViewPager Demo", "Service Demo", "BroadcastReceiver Demo" };
 
     private static final int      total    = mStrings.length - 1;
 
@@ -60,7 +63,7 @@ public class DemoList extends BaseActivity {
                     Intent intent = new Intent(DemoList.this, ViewPagerMulTiFragmentDemo.class);
                     startActivity(intent);
                 } else if (position == total - 3) {
-                    Intent intent = new Intent(DemoList.this, GalleryDemo.class);
+                    Intent intent = new Intent(DemoList.this, SlideOnePageGalleryDemo.class);
                     startActivity(intent);
                 } else if (position == total - 2) {
                     Intent intent = new Intent(DemoList.this, ViewPagerDemo.class);
@@ -74,7 +77,8 @@ public class DemoList extends BaseActivity {
                 }
             }
         });
-        
-        startActivity(new Intent(this, DropDownListViewDemo.class));
+
+        ImageCache cache = new ImageCache();
+        Log.i(TAG, cache.toString());
     }
 }

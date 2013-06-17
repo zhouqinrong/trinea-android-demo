@@ -24,8 +24,7 @@ public class MyAIDLService extends Service {
     private MyAIDLInterface.Stub myBinder = new MyAIDLInterface.Stub() {
 
                                               @Override
-                                              public void setCount(int count)
-                                                                             throws RemoteException {
+                                              public void setCount(int count) throws RemoteException {
                                                   mCount = count;
                                               }
 

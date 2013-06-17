@@ -21,8 +21,7 @@ public class PreferencesUtils {
      * @param value
      */
     public static void putLongPreferences(Context context, String key, long value) {
-        SharedPreferences settings = context.getSharedPreferences(PREFERENCES_NAME,
-                                                                  Context.MODE_PRIVATE);
+        SharedPreferences settings = context.getSharedPreferences(PREFERENCES_NAME, Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = settings.edit();
         editor.putLong(key, value);
         editor.commit();
@@ -36,8 +35,7 @@ public class PreferencesUtils {
      * @return
      */
     public static long getLongPreferences(Context context, String key) {
-        SharedPreferences settings = context.getSharedPreferences(PREFERENCES_NAME,
-                                                                  Context.MODE_PRIVATE);
+        SharedPreferences settings = context.getSharedPreferences(PREFERENCES_NAME, Context.MODE_PRIVATE);
         return settings.getLong(key, -1);
     }
 }

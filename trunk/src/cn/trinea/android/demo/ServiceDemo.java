@@ -62,7 +62,8 @@ public class ServiceDemo extends BaseActivity {
                                       @Override
                                       public void onServiceConnected(ComponentName name, IBinder service) {
                                           myService = ((MyBinder)service).getService();
-                                          Toast.makeText(getApplicationContext(), "Service Connect", Toast.LENGTH_SHORT).show();
+                                          Toast.makeText(getApplicationContext(), "Service Connect", Toast.LENGTH_SHORT)
+                                               .show();
                                       }
                                   };
 
@@ -135,7 +136,8 @@ public class ServiceDemo extends BaseActivity {
             @Override
             public void onClick(View v) {
                 if (myService != null) {
-                    Toast.makeText(getApplicationContext(), "Service count:" + myService.getCount(), Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getApplicationContext(), "Service count:" + myService.getCount(), Toast.LENGTH_SHORT)
+                         .show();
                 } else {
                     Toast.makeText(getApplicationContext(), "请先绑定服务。", Toast.LENGTH_SHORT).show();
                 }

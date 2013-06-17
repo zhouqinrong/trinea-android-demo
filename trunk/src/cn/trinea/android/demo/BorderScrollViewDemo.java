@@ -6,8 +6,8 @@ import android.view.Display;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.trinea.android.common.view.BorderScrollView;
-import com.trinea.android.common.view.BorderScrollView.OnBorderListener;
+import cn.trinea.android.common.view.BorderScrollView;
+import cn.trinea.android.common.view.BorderScrollView.OnBorderListener;
 
 /**
  * BorderScrollViewDemo

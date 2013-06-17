@@ -3,7 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent" >
 
-    <com.trinea.android.common.view.BorderScrollView
+    <cn.trinea.android.common.view.BorderScrollView
         android:id="@+id/scroll_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -45,7 +45,7 @@
                 android:gravity="center"
                 android:text="bottom text" />
         </RelativeLayout>
-    </com.trinea.android.common.view.BorderScrollView>
+    </cn.trinea.android.common.view.BorderScrollView>
 
     <include layout="@layout/trinea_info" />
 

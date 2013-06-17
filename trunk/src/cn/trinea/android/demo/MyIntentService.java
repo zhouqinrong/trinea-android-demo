@@ -17,9 +17,8 @@ public class MyIntentService extends IntentService {
     @Override
     protected void onHandleIntent(Intent intent) {
         try {
-            System.out.println("IntentService1 Begin Sleep. " + "Thread name: "
-                               + Thread.currentThread().getName() + ", Thread Id: "
-                               + Thread.currentThread().getId());
+            System.out.println("IntentService1 Begin Sleep. " + "Thread name: " + Thread.currentThread().getName()
+                               + ", Thread Id: " + Thread.currentThread().getId());
             Thread.sleep(3000);
             System.out.println("IntentService1 End. ");
         } catch (InterruptedException e) {

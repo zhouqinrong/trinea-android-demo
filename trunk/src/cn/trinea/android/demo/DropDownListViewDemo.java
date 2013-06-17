@@ -5,15 +5,14 @@ import java.util.Arrays;
 import java.util.Date;
 import java.util.LinkedList;
 
-import android.annotation.SuppressLint;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.ArrayAdapter;
 
-import com.trinea.android.common.view.DropDownListView;
-import com.trinea.android.common.view.DropDownListView.OnDropDownListener;
+import cn.trinea.android.common.view.DropDownListView;
+import cn.trinea.android.common.view.DropDownListView.OnDropDownListener;
 
 /**
  * DropDownListViewDemo
@@ -26,12 +25,15 @@ public class DropDownListViewDemo extends BaseActivity {
     private DropDownListView     listView  = null;
     private ArrayAdapter<String> adapter;
 
+    private String[]             mStrings  = { "Aaaaaa", "Bbbbbb", "Cccccc", "Dddddd", "Eeeeee", "Ffffff", "Gggggg",
+            "Hhhhhh", "Iiiiii", "Jjjjjj", "Kkkkkk", "Llllll", "Mmmmmm", "Nnnnnn", };
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState, R.layout.drop_down_listview_demo);
 
         listView = (DropDownListView)findViewById(R.id.list_view);
-        // set refresh listener
+        // set drop down listener
         listView.setOnDropDownListener(new OnDropDownListener() {
 
             @Override
@@ -39,7 +41,9 @@ public class DropDownListViewDemo extends BaseActivity {
                 new GetDataTask(true).execute();
             }
         });
-        listView.setOnLoadMoreListener(new OnClickListener() {
+
+        // set on bottom listener
+        listView.setOnBottomListener(new OnClickListener() {
 
             @Override
             public void onClick(View v) {
@@ -71,30 +75,25 @@ public class DropDownListViewDemo extends BaseActivity {
             return mStrings;
         }
 
-        @SuppressLint("SimpleDateFormat")
         @Override
         protected void onPostExecute(String[] result) {
 
             if (isDropDown) {
-                listItems.addFirst("Added after refresh");
+                listItems.addFirst("Added after drop down");
                 adapter.notifyDataSetChanged();
 
                 // should call onDropDownComplete function of DropDownListView at end of drop down complete.
                 SimpleDateFormat dateFormat = new SimpleDateFormat("MM-dd HH:mm:ss");
                 listView.onDropDownComplete(getString(R.string.update_at) + dateFormat.format(new Date()));
             } else {
-                listItems.add("Added after load more");
-
-                listView.onLoadMoreComplete();
+                listItems.add("Added after on bottom");
                 adapter.notifyDataSetChanged();
+
+                // should call onBottomComplete function of DropDownListView at end of on bottom complete.
+                listView.onBottomComplete();
             }
 
             super.onPostExecute(result);
         }
     }
-
-    private String[] mStrings = { "Abbaye de Belloc", "Abbaye du Mont des Cats", "Abertam", "Abondance", "Ackawi",
-            "Acorn", "Adelost", "Affidelice au Chablis", "Afuega'l Pitu", "Airag", "Airedale", "Aisy Cendre",
-            "Allgauer Emmentaler" };
-
 }

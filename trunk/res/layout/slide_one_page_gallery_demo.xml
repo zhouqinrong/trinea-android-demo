@@ -4,7 +4,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical" >
 
-    <Gallery
+    <cn.trinea.android.common.view.SlideOnePageGallery
         android:id="@+id/app_app_image_gallery"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

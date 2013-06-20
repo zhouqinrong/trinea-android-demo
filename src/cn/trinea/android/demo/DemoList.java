@@ -77,8 +77,5 @@ public class DemoList extends BaseActivity {
                 }
             }
         });
-
-        ImageCache cache = new ImageCache();
-        Log.i(TAG, cache.toString());
     }
 }

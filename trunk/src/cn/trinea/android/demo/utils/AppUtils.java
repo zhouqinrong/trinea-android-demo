@@ -11,6 +11,7 @@ import android.widget.Button;
 import cn.trinea.android.demo.BorderScrollViewDemo;
 import cn.trinea.android.demo.BroadcastReceiverDemo;
 import cn.trinea.android.demo.DownloadManagerDemo;
+import cn.trinea.android.demo.DropDownListViewDemo;
 import cn.trinea.android.demo.R;
 import cn.trinea.android.demo.SearchViewDemo;
 import cn.trinea.android.demo.ServiceDemo;
@@ -71,6 +72,9 @@ public class AppUtils {
         } else if (sourClass == BorderScrollViewDemo.class) {
             url = "http://www.trinea.cn/?p=445";
             name = "BorderScrollViewDemo介绍";
+        } else if (sourClass == DropDownListViewDemo.class) {
+            url = "http://www.trinea.cn/?p=523";
+            name = "下拉刷新及底部加载更多Listview";
         } else {
             prefix = "个人主页:";
             url = "http://www.trinea.cn";

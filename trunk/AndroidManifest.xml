@@ -2,12 +2,13 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="cn.trinea.android.demo"
     android:installLocation="preferExternal"
-    android:versionCode="28"
-    android:versionName="2.9.4" >
+    android:versionCode="29"
+    android:versionName="2.9.5" >
 
     <uses-sdk android:minSdkVersion="14" />
 
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.BROADCAST_STICKY" />
     <uses-permission android:name="android.permission.DOWNLOAD_WITHOUT_NOTIFICATION" />
@@ -47,6 +48,18 @@
 
                 <data android:mimeType="application/cn.trinea.download.file" />
             </intent-filter>
+        </activity>
+        <activity
+            android:name=".ImageSDCardCacheDemo"
+            android:configChanges="orientation|keyboardHidden"
+            android:label="@string/imagesdcardcache_demo_activity_title"
+            android:theme="@android:style/Theme.Holo.Light.DialogWhenLarge" >
+        </activity>
+        <activity
+            android:name=".ImageCacheDemo"
+            android:configChanges="orientation|keyboardHidden"
+            android:label="@string/imagecache_demo_activity_title"
+            android:theme="@android:style/Theme.Holo.Light.DialogWhenLarge" >
         </activity>
         <activity
             android:name=".DropDownListViewDemo"

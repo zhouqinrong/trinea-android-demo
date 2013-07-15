@@ -4,11 +4,7 @@ import java.util.Arrays;
 import java.util.LinkedList;
 
 import android.app.ActionBar;
-import android.app.DownloadManager;
-import android.app.DownloadManager.Request;
-import android.content.Context;
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
@@ -25,7 +21,7 @@ public class DemoList extends BaseActivity {
 
     public static final String    TAG      = "DemoList";
 
-    private static final String[] mStrings = { "ImageCache Demo", "DropDownListView Demo",
+    private static final String[] mStrings = { "ImageSDCardCache Demo", "ImageCache Demo", "DropDownListView Demo",
             "onBottom onTop ScrollView Demo", "DownloadManager Demo", "SearchView Demo",
             "ViewPager Multi Fragment Demo", "Slide One Page Gallery Demo", "ViewPager Demo", "Service Demo",
             "BroadcastReceiver Demo"      };
@@ -49,7 +45,10 @@ public class DemoList extends BaseActivity {
 
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                if (position == total - 9) {
+                if (position == total - 10) {
+                    Intent intent = new Intent(DemoList.this, ImageSDCardCacheDemo.class);
+                    startActivity(intent);
+                } else if (position == total - 9) {
                     Intent intent = new Intent(DemoList.this, ImageCacheDemo.class);
                     startActivity(intent);
                 } else if (position == total - 8) {

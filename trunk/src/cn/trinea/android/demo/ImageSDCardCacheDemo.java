@@ -1,21 +1,28 @@
 package cn.trinea.android.demo;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
 import android.content.Context;
-import android.graphics.drawable.Drawable;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
-import android.view.Display;
+import android.os.Environment;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.animation.AlphaAnimation;
+import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.ImageView.ScaleType;
-import android.widget.RelativeLayout;
 import android.widget.RelativeLayout.LayoutParams;
-import cn.trinea.android.common.service.impl.ImageCache;
-import cn.trinea.android.common.service.impl.ImageCache.OnImageCallbackListener;
+import cn.trinea.android.common.service.impl.FileNameRuleImageUrl;
+import cn.trinea.android.common.service.impl.ImageSDCardCache;
+import cn.trinea.android.common.service.impl.ImageSDCardCache.OnImageSDCallbackListener;
 import cn.trinea.android.common.service.impl.RemoveTypeLastUsedTimeFirst;
+import cn.trinea.android.common.util.ListUtils;
+import cn.trinea.android.common.view.SlideOnePageGallery;
 
 /**
  * ImageSDCardCacheDemo
@@ -24,88 +31,58 @@ import cn.trinea.android.common.service.impl.RemoveTypeLastUsedTimeFirst;
  */
 public class ImageSDCardCacheDemo extends BaseActivity {
 
-    /** column number **/
-    public static final int COLUMNS                  = 2;
-    /** imageView default height **/
-    public static final int IMAGEVIEW_DEFAULT_HEIGHT = 400;
-
-    private RelativeLayout  parentLayout;
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState, R.layout.image_sdcard_cache_demo);
+        super.onCreate(savedInstanceState, R.layout.slide_one_page_gallery_demo);
 
         Context context = getApplicationContext();
-        parentLayout = (RelativeLayout)findViewById(R.id.image_sdcard_cache_parent_layout);
         initImageUrlList();
-        ICON_CACHE.setContext(context);
+        IMAGE_SD_CACHE.setContext(context);
 
-        int count = 0, viewId = 0x7F24FFF0;
-        int verticalSpacing, horizontalSpacing;
-        verticalSpacing = horizontalSpacing = getResources().getDimensionPixelSize(R.dimen.dp_4);
-        Display display = getWindowManager().getDefaultDisplay();
-        int imageWidth = (display.getWidth() - (COLUMNS + 1) * horizontalSpacing) / COLUMNS;
-        for (String imageUrl : imageUrlList) {
-            ImageView imageView = new ImageView(context);
-            imageView.setId(++viewId);
-            imageView.setBackgroundResource(R.drawable.image_border);
-            parentLayout.addView(imageView);
+        SlideOnePageGallery imageGallery = (SlideOnePageGallery)findViewById(R.id.app_app_image_gallery);
+        ImageAdapter adapter = new ImageAdapter(context);
+        adapter.setImageUrlList(imageUrlList);
+        imageGallery.setAdapter(adapter);
 
-            // set imageView layout params
-            LayoutParams layoutParams = (RelativeLayout.LayoutParams)imageView.getLayoutParams();
-            layoutParams.width = imageWidth;
-            layoutParams.topMargin = verticalSpacing;
-            layoutParams.rightMargin = horizontalSpacing;
-            int column = count % COLUMNS;
-            int row = count / COLUMNS;
-            if (row > 0) {
-                layoutParams.addRule(RelativeLayout.BELOW, viewId - COLUMNS);
-            }
-            if (column > 0) {
-                layoutParams.addRule(RelativeLayout.RIGHT_OF, viewId - 1);
-            }
-
-            // get image
-            if (!ICON_CACHE.get(imageUrl, imageView)) {
-                // imageView.setBackgroundResource(R.drawable.trinea);
-                layoutParams.height = IMAGEVIEW_DEFAULT_HEIGHT;
-            }
-            count++;
-        }
     }
 
     /** icon cache **/
-    public static final ImageCache ICON_CACHE = new ImageCache(128);
+    public static final ImageSDCardCache IMAGE_SD_CACHE = new ImageSDCardCache();
 
     static {
         /** init icon cache **/
-        OnImageCallbackListener imageCallBack = new OnImageCallbackListener() {
+        OnImageSDCallbackListener imageCallBack = new OnImageSDCallbackListener() {
 
             private static final long serialVersionUID = 1L;
 
             @Override
-            public void onImageLoaded(String imageUrl, Drawable imageDrawable, View view, boolean isInCache) {
-                if (view != null && imageDrawable != null) {
-                    ImageView imageView = (ImageView)view;
-                    imageView.setImageDrawable(imageDrawable);
-                    // if not in cache, start animation
+            public void onImageLoaded(String imageUrl, String imagePath, View view, boolean isInCache) {
+                ImageView imageView = (ImageView)view;
+
+                Bitmap bm = BitmapFactory.decodeFile(imagePath);
+                if (bm != null) {
+                    // auto set height
+                    LayoutParams imageParams = (LayoutParams)imageView.getLayoutParams();
+                    imageParams.height = imageParams.width * bm.getHeight() / bm.getWidth();
+                    imageView.setScaleType(ScaleType.FIT_XY);
+                    imageView.setImageBitmap(bm);
+
+                    // first time show with animation
                     if (!isInCache) {
                         imageView.startAnimation(getInAlphaAnimation(2000));
                     }
-
-                    // auto set height accroding to rate between height and widght
-                    LayoutParams imageParams = (LayoutParams)imageView.getLayoutParams();
-                    imageParams.height = imageParams.width * imageDrawable.getIntrinsicHeight()
-                                         / imageDrawable.getIntrinsicWidth();
-                    imageView.setScaleType(ScaleType.FIT_XY);
                 }
             }
         };
-        ICON_CACHE.setOnImageCallbackListener(imageCallBack);
-        ICON_CACHE.setCacheFullRemoveType(new RemoveTypeLastUsedTimeFirst<Drawable>());
-        ICON_CACHE.setHttpReadTimeOut(10000);
-        ICON_CACHE.setOpenWaitingQueue(true);
-        ICON_CACHE.setValidTime(-1);
+        IMAGE_SD_CACHE.setOnImageSDCallbackListener(imageCallBack);
+        IMAGE_SD_CACHE.setCacheFullRemoveType(new RemoveTypeLastUsedTimeFirst<String>());
+        IMAGE_SD_CACHE.setCacheFolder(Environment.getExternalStorageDirectory().getAbsolutePath() + File.separator
+                                     + "TrineaAndroidCommon");
+        IMAGE_SD_CACHE.setFileNameRule(new FileNameRuleImageUrl());
+
+        IMAGE_SD_CACHE.setHttpReadTimeOut(10000);
+        IMAGE_SD_CACHE.setOpenWaitingQueue(true);
+        IMAGE_SD_CACHE.setValidTime(-1);
     }
 
     public static AlphaAnimation getInAlphaAnimation(long durationMillis) {
@@ -113,6 +90,27 @@ public class ImageSDCardCacheDemo extends BaseActivity {
         inAlphaAnimation.setDuration(durationMillis);
         return inAlphaAnimation;
     }
+
+    /**
+     * scale image to fixed height and weight
+     * 
+     * @param imagePath
+     * @return
+     */
+    private static int getImageScale(String imagePath) {
+        BitmapFactory.Options option = new BitmapFactory.Options();
+        option.inJustDecodeBounds = true;
+        BitmapFactory.decodeFile(imagePath, option);
+
+        int scale = 1;
+        while (option.outWidth / scale >= IMAGE_MAX_WIDTH || option.outHeight / scale >= IMAGE_MAX_HEIGHT) {
+            scale *= 2;
+        }
+        return scale;
+    }
+
+    private static int   IMAGE_MAX_WIDTH  = 480;
+    private static int   IMAGE_MAX_HEIGHT = 960;
 
     private List<String> imageUrlList;
 
@@ -131,5 +129,65 @@ public class ImageSDCardCacheDemo extends BaseActivity {
         imageUrlList.add("http://farm4.staticflickr.com/3739/9148528022_e9bf03058f.jpg");
         imageUrlList.add("http://farm4.staticflickr.com/3696/9146300409_dfa9d7c603.jpg");
         imageUrlList.add("http://farm8.staticflickr.com/7288/9146300469_bd3420c75b_z.jpg");
+    }
+
+    private static class ImageAdapter extends BaseAdapter {
+
+        private LayoutInflater inflater;
+        public List<String>    imageUrlList;
+
+        public ImageAdapter(Context context){
+            super();
+            inflater = LayoutInflater.from(context);
+        }
+
+        @Override
+        public int getCount() {
+            return ListUtils.isEmpty(imageUrlList) ? 0 : imageUrlList.size();
+        }
+
+        @Override
+        public Object getItem(int position) {
+            return ListUtils.isEmpty(imageUrlList) ? null : imageUrlList.get(position);
+        }
+
+        @Override
+        public long getItemId(int position) {
+            return position;
+        }
+
+        @Override
+        public View getView(int position, View convertView, ViewGroup parent) {
+            ViewHolder holder;
+            if (convertView == null) {
+                convertView = inflater.inflate(R.layout.image_list_item, null);
+                holder = new ViewHolder();
+                holder.imageView = (ImageView)convertView.findViewById(R.id.image_list_image);
+                convertView.setTag(holder);
+            } else {
+                holder = (ViewHolder)convertView.getTag();
+            }
+
+            // if not in cache, set default icon
+            if (!IMAGE_SD_CACHE.get(imageUrlList.get(position), holder.imageView)) {
+                holder.imageView.setImageResource(R.drawable.trinea);
+                holder.imageView.setScaleType(ScaleType.CENTER);
+            }
+            return convertView;
+        }
+
+        public void setImageUrlList(List<String> imageUrlList) {
+            this.imageUrlList = imageUrlList;
+        }
+
+        /**
+         * ViewHolder
+         * 
+         * @author Trinea 2012-11-22
+         */
+        static class ViewHolder {
+
+            ImageView imageView;
+        }
     }
 }

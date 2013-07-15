@@ -38,7 +38,7 @@ public class ImageCacheDemo extends BaseActivity {
         Context context = getApplicationContext();
         parentLayout = (RelativeLayout)findViewById(R.id.image_cache_parent_layout);
         initImageUrlList();
-        ICON_CACHE.setContext(context);
+        IMAGE_CACHE.setContext(context);
 
         int count = 0, viewId = 0x7F24FFF0;
         int verticalSpacing, horizontalSpacing;
@@ -67,7 +67,7 @@ public class ImageCacheDemo extends BaseActivity {
             }
 
             // get image
-            if (!ICON_CACHE.get(imageUrl, imageView)) {
+            if (!IMAGE_CACHE.get(imageUrl, imageView)) {
                 imageView.setImageResource(R.drawable.trinea);
                 layoutParams.height = IMAGEVIEW_DEFAULT_HEIGHT;
             }
@@ -76,7 +76,7 @@ public class ImageCacheDemo extends BaseActivity {
     }
 
     /** icon cache **/
-    public static final ImageCache ICON_CACHE = new ImageCache(128);
+    public static final ImageCache IMAGE_CACHE = new ImageCache(128);
 
     static {
         /** init icon cache **/
@@ -89,7 +89,7 @@ public class ImageCacheDemo extends BaseActivity {
                 if (view != null && imageDrawable != null) {
                     ImageView imageView = (ImageView)view;
                     imageView.setImageDrawable(imageDrawable);
-                    // if not in cache, start animation
+                    // first time show with animation
                     if (!isInCache) {
                         imageView.startAnimation(getInAlphaAnimation(2000));
                     }
@@ -102,11 +102,12 @@ public class ImageCacheDemo extends BaseActivity {
                 }
             }
         };
-        ICON_CACHE.setOnImageCallbackListener(imageCallBack);
-        ICON_CACHE.setCacheFullRemoveType(new RemoveTypeLastUsedTimeFirst<Drawable>());
-        ICON_CACHE.setHttpReadTimeOut(10000);
-        ICON_CACHE.setOpenWaitingQueue(true);
-        ICON_CACHE.setValidTime(-1);
+        IMAGE_CACHE.setOnImageCallbackListener(imageCallBack);
+        IMAGE_CACHE.setCacheFullRemoveType(new RemoveTypeLastUsedTimeFirst<Drawable>());
+
+        IMAGE_CACHE.setHttpReadTimeOut(10000);
+        IMAGE_CACHE.setOpenWaitingQueue(true);
+        IMAGE_CACHE.setValidTime(-1);
     }
 
     public static AlphaAnimation getInAlphaAnimation(long durationMillis) {

@@ -83,7 +83,7 @@ public class AppUtils {
             url = "http://www.trinea.cn/?p=704";
             contentSrcId = R.string.desc_image_cache;
         } else if (sourClass == ImageSDCardCacheDemo.class) {
-            url = "http://www.trinea.cn/?p=705";
+            url = "http://www.trinea.cn/?p=757";
             contentSrcId = R.string.desc_image_sdcard_cache;
         } else {
             prefixSrcId = R.string.profile;

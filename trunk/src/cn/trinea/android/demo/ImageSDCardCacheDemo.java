@@ -59,7 +59,10 @@ public class ImageSDCardCacheDemo extends BaseActivity {
             public void onImageLoaded(String imageUrl, String imagePath, View view, boolean isInCache) {
                 ImageView imageView = (ImageView)view;
 
-                Bitmap bm = BitmapFactory.decodeFile(imagePath);
+                // avoid oom caused by bitmap size exceeds VM budget
+                BitmapFactory.Options option = new BitmapFactory.Options();
+                option.inSampleSize = getImageScale(imagePath);
+                Bitmap bm = BitmapFactory.decodeFile(imagePath, option);
                 if (bm != null) {
                     // auto set height
                     LayoutParams imageParams = (LayoutParams)imageView.getLayoutParams();
@@ -77,7 +80,7 @@ public class ImageSDCardCacheDemo extends BaseActivity {
         IMAGE_SD_CACHE.setOnImageSDCallbackListener(imageCallBack);
         IMAGE_SD_CACHE.setCacheFullRemoveType(new RemoveTypeLastUsedTimeFirst<String>());
         IMAGE_SD_CACHE.setCacheFolder(Environment.getExternalStorageDirectory().getAbsolutePath() + File.separator
-                                     + "TrineaAndroidCommon");
+                                      + "TrineaAndroidCommon");
         IMAGE_SD_CACHE.setFileNameRule(new FileNameRuleImageUrl());
 
         IMAGE_SD_CACHE.setHttpReadTimeOut(10000);
@@ -99,6 +102,8 @@ public class ImageSDCardCacheDemo extends BaseActivity {
      */
     private static int getImageScale(String imagePath) {
         BitmapFactory.Options option = new BitmapFactory.Options();
+        // set inJustDecodeBounds to true, allowing the caller to query the bitmap info without having to allocate the
+        // memory for its pixels.
         option.inJustDecodeBounds = true;
         BitmapFactory.decodeFile(imagePath, option);
 
@@ -124,6 +129,9 @@ public class ImageSDCardCacheDemo extends BaseActivity {
         imageUrlList.add("http://farm3.staticflickr.com/2857/9148527928_3063544889.jpg");
         imageUrlList.add("http://farm8.staticflickr.com/7318/9146300275_5fe995d123.jpg");
         imageUrlList.add("http://farm8.staticflickr.com/7351/9148527976_8a4e75ae87.jpg");
+        imageUrlList.add("http://farm4.staticflickr.com/3679/9146300263_5c2191232a_o.jpg");
+        imageUrlList.add("http://farm3.staticflickr.com/2863/9148527892_31f9377351_o.jpg");
+        imageUrlList.add("http://farm3.staticflickr.com/2888/9148527996_f05118d7de_o.jpg");
         imageUrlList.add("http://farm8.staticflickr.com/7310/9148528008_8e8f51997a.jpg");
         imageUrlList.add("http://farm3.staticflickr.com/2849/9148528108_dfcda19507.jpg");
         imageUrlList.add("http://farm4.staticflickr.com/3739/9148528022_e9bf03058f.jpg");
